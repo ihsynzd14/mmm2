@@ -1,0 +1,156 @@
+<div class="user-box" ng-init="load()">
+    <div class="header-box"> Terapie
+        <md-button aria-label="" style="cursor:default">
+            <md-icon class="fa fa-question-circle"></md-icon>
+            <md-tooltip md-direction="bottom">
+                <span>Da questa pagina puoi creare un'agenda per ogni farmaco
+                    che devi assumere con gli orari, le avvertenze e altre utilità.
+                </span>
+            </md-tooltip>
+        </md-button>
+    </div>
+    <div class="body-box therapie_container">
+        <md-content class="md-padding">
+            <!-- tab dinamici md-dynamic-height md-border-bottom-->
+            <md-tabs class="md-accent">
+                <md-tab id="tab1">
+                    <md-tab-label>Terapie in corso</md-tab-label>
+                    <md-tab-body>
+                        <ul class="generalinfo-profile">
+                            <p id="empty_terapy_in_corso" style="display:none">Non sono presenti terapie in corso</p>
+                            <!--<img id="loader_terapia" src="images/loader.gif" style="display:block; margin-left: 40%;">-->
+                            <div id="loader_terapia" layout="row" layout-sm="column" layout-align="space-around" style="display:block;  margin-left: 40%;">
+                                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                            </div>
+                            <li id="terapiaIC_{{terapia_in_corso.pk}}" ng-repeat="terapia_in_corso in terapie_in_corso">
+                                <div class="therapybtn">
+                                    <button class="btnsmall" title="Hai tempo 2 giorni per fare delle correzioni" ng-show="showButtonEdit(terapia_in_corso.created)"
+                                        ng-click="actionObjects($event, terapia_schema, 'Modifica', terapia_in_corso)">
+                                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                                    </button>
+                                    <button class="btnsmall" ng-click="deactiveTerapy(terapia_in_corso.pk)" title="Disattiva la terapia">
+                                        <i class="fa fa-ban" aria-hidden="true"></i>
+                                    </button>
+
+                                    <button class="btnsmall" title="Cancella la terapia" ng-click="conferma($ev, terapia_in_corso.pk)" ng-show="showButtonEdit(terapia_in_corso.created)">
+                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    </button>
+                                    <button class="btnmymedtag" ng-click="intoSalvavita(terapia_in_corso)" title="Attiva/Disattiva la visualizzazione della terapia in MyMedTag">
+                                        <img ng-if="terapia_in_corso['lifesaver']==true" src="images/sos.png" title="MyMedTag" class="myMedSosT">
+                                        <img ng-if="terapia_in_corso['lifesaver']==false" src="images/sosgray.png" title="MyMedTag" class="myMedSosF">
+                                    </button>
+                                </div>
+                                <div class="panel-group" id="accordion">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a href="javascript:;" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_{{terapia_in_corso.pk}}">
+                                                    <i class="fa fa-chevron-right" aria-hidden="true"></i> {{terapia_in_corso.drug}}
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapse_{{terapia_in_corso.pk}}" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                <div ng-repeat="tf in terapia_schema[0].items">
+                                                    <span class="titlebold">{{tf.title}}:</span>
+                                                    <span ng-if="tf.label!=='doctor' && terapia_in_corso[tf.label]!=false && terapia_in_corso[tf.label]!=true && tf.type!=='file'">
+                                                            <span ng-if="tf.label==='posologiestherapy_set' && item.hour" ng-repeat="item in terapia_in_corso[tf.label] track by $index">
+                                                                <br />
+                                                                <ul class="dosage">
+                                                                    <li><span class="titlebold">Posologia:</span><span> {{item.posology}} </span>
+                                                    <span class="titlebold">Orario:</span><span> {{item.hour}}</span><br
+                                                    />
+                            </li>
+                        </ul>
+                        </span>
+                        <span ng-if="tf.label!=='posologiestherapy_set'">{{terapia_in_corso[tf.label]}}</span>
+                        </span>
+                        <div ng-if="tf.type==='file'">
+                            <ul class="listfile">
+                                <li ng-repeat="file in terapia_in_corso['attachments'] track by $index">
+                                    <i class="fa fa-file-o" aria-hidden="true"></i>
+                                    <a ng-click="openFile(file.document)" no-href>Therapy_{{file.created | date:'yyyy-MM-dd'}}</a>
+                                    <i class="fa fa-times" ng-show="terapia_in_corso['user']==profile.pk" 
+                                        aria-hidden="true" ng-click="deleteDocumentTherapy($event, file.pk)"
+                                        style="margin-top:0 !important"></i>
+                                </li>
+                            </ul>
+                        </div>
+                        <span ng-if="tf.type=='checkbox' && tf.label!=='file' && terapia_in_corso[tf.label]==true">SI</span>
+                        <span ng-if="tf.type=='checkbox' && terapia_in_corso[tf.label]==false">NO</span>
+                        <span ng-if="tf.label==='doctor'">{{terapia_in_corso.doctor}}</span>
+                        </span>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                        </li>
+                        </ul>
+                    </md-tab-body>
+                </md-tab>
+                <md-tab id="tab2">
+                    <md-tab-label>Archivio terapie</md-tab-label>
+                    <md-tab-body>
+                        <ul class="generalinfo-profile">
+                            <p id="empty_terapy_archiviate" style="display:none">Non sono presenti terapie in archivio</p>
+                            <!--<img id="loader_terapia" src="images/loader.gif" style="display:block; margin-left: 40%;">-->
+                            <div id="loader_terapia_arch" layout="row" layout-sm="column" layout-align="space-around" style="display:block;  margin-left: 40%;">
+                                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                            </div>
+                            <li id="terapiaA_{{terapia_archiviata.pk}}" ng-repeat="terapia_archiviata in terapie_archiviate">
+                                <div class="panel-group" id="accordion">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading-archiaviate">
+                                            <h4 class="panel-title">
+                                                <a href="javascript:;" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_{{terapia_archiviata.pk}}">
+                                                    <i class="fa fa-chevron-right" aria-hidden="true"></i> {{terapia_archiviata.drug}}
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapse_{{terapia_archiviata.pk}}" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                <div ng-repeat="tf in terapia_schema[0].items">
+                                                    <span class="titlebold">{{tf.title}}:</span>
+                                                    <span ng-if="tf.label!=='doctor' && terapia_archiviata[tf.label]!=false && terapia_archiviata[tf.label]!=true && tf.type!=='file'">
+                                                        <span ng-if="tf.label==='posologiestherapy_set' && item.hour" ng-repeat="item in terapia_archiviata[tf.label] track by $index">
+                                                            <br />
+                                                            <ul class="dosage">
+                                                                <li>
+                                                                    <span class="titlebold">Posologia:</span>
+                                                    <span> {{item.posology}} </span>
+                                                    <span class="titlebold">Orario:</span>
+                                                    <span> {{item.hour}}</span><br />
+                            </li>
+                        </ul>
+                        </span>
+                        <span ng-if="tf.label!=='posologiestherapy_set'">{{terapia_archiviata[tf.label]}}</span>
+                        </span>
+                        <div ng-if="tf.type==='file'">
+                            <ul class="listfile">
+                                <li ng-repeat="file in terapia_archiviata['attachments'] track by $index">
+                                    <i class="fa fa-file-o" aria-hidden="true"></i>
+                                    <a ng-click="openFile(file.document)" no-href>Therapy_{{file.created | date:'yyyy-MM-dd'}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <span ng-if="tf.label!=='doctor' && tf.label!=='file' && terapia_archiviata[tf.label]==true">SI</span>
+                        <span ng-if="tf.label!=='doctor' && tf.label!=='file' && terapia_archiviata[tf.label]==false">NO</span>
+                        <span ng-if="tf.label==='doctor'">{{terapia_archiviata.doctor}}</span>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                        </li>
+                        </ul>
+                    </md-tab-body>
+                </md-tab>
+                <hr/>
+            </md-tabs>
+        </md-content>
+    </div>
+    <div class="footer-box">
+        <button class="btn" title="crea una nuova terapia" ng-click="actionObjects($event, terapia_schema, 'Crea', null)">Crea una nuova Terapia</button>
+    </div>
+</div>

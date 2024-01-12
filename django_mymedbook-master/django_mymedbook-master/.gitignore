@@ -1,0 +1,7 @@
+logs
+*.pyc
+/static
+/.vscode
+/reload
+/mymedtag/node_modules
+/mymedtag/bower_components

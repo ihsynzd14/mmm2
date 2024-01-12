@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+
+<head>
+	<title>MyMedBook</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script src="../build/_bower.js?v=7"></script>
+	<!--css-->
+	<link rel="stylesheet" type="text/css" href="../build/_bower.css" />
+	<link rel="stylesheet" type="text/css" href="style.css?v=7" />
+
+	<!--config-->
+	<script src="../js/config.js?v=7"></script>
+	<!--app.js-->
+	<script src="../js/controller/app.js?v=7"></script>
+	<!--controller-->
+	<script src="../js/script.js?v=7"></script>
+	<script type="text/javascript" src="../js/controller/loginController.js?v=7"></script>
+	<!--fontawesome-->
+	<link rel="stylesheet" href="../font-awesome/css/font-awesome.min.css">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+	<!--fontawesome-->
+	<link rel="stylesheet" href="../font-awesome/css/font-awesome.min.css">
+</head>
+
+<body>
+	<header id="header" class="" role="menu">
+		<!-- LOGO -->
+		<div class="container">
+			<div id="textlogo"><img class="imglogo" hspace="10" src="logommb.png">
+				<span class="nomelogo">
+							MYMEDBook
+					</span>
+			</div>
+		</div>
+	</header>
+	<div class="col-xs-7">
+		<!-- LOGIN -->
+		<div class="loginuser" id="login">
+			<h3 class="md-display-1">
+				Cambia Password
+			</h3>
+			<form name="loginForm" layout="column" layout-fill layout-padding layout-margin action="javascript:void()" onsubmit="return false;">
+				<fieldset>
+					<div align="center" class="clearfix">
+						<label for="password" style="margin-left: 10px;">Nuova password</label></br>
+						<input id="password" class="password" type="password" placeholder="Password" pattern=".{6,}" required title="minimo 6 caratteri"
+							autocomplete="off" style="margin-left: 10px; margin-top: 10px;">
+					</div>
+					<div align="center" class="clearfix" style="margin-top: 18px;">
+						<label for="password1" style="margin-left: 10px;">Ripeti  password</label></br>
+						<input id="password1" class="password" type="password" placeholder="Password" pattern=".{6,}" required title="minimo 6 caratteri"
+							autocomplete="off" style="margin-left: 10px; margin-top: 10px;">
+					</div>
+					<div align="center" style="margin-bottom: 20px; margin-top: 15px;">
+						<button class="btn md-raised md-primary" id="bottone-abilita" class="btn primary" type="submit" >Invia</button>
+						<button disabled id="bottone-disabilita" class="btn primary" type="submit" style="display:none;">Invia</button>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+		<div align="center" class="message-error" style="margin-top: 5px;"></div>
+		<script type="text/javascript">
+	function getParameterByName(name, url) {
+    	if (!url) url = window.location.href;
+	    name = name.replace(/[\[\]]/g, "\\$&");
+	    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+	        results = regex.exec(url);
+	    if (!results) return null;
+	    if (!results[2]) return '';
+	    return decodeURIComponent(results[2].replace(/\+/g, " "));
+	}
+
+	$(document).ready(function() {
+		//?uidb64=MTEx&token=4km-359514c23c32463c6088#/
+		//var uidb64 = window.location.href.split("?uidb64=");
+		//uidb64 = uidb64[1].split("&");
+		//console.log(uidb64[0])
+		//var token = window.location.href.split("&token=");
+		//token = token[1].split("#");
+		var uidb64 = getParameterByName('uidb64');
+		console.log('uidb64='+uidb64);
+		var token = getParameterByName('token');
+		console.log('token='+token);
+		//console.log(token[0])
+
+		//if((token.length < 2) || (token[0] == ""))
+		if(uidb64 == "" || uidb64 == null)
+		{
+			$(".message-error").text("Codice utente mancante");
+			$(".message-error").show();
+			$("#bottone-disabilita").show();
+			$("#bottone-abilita").hide();
+		}
+		else if(token == "" || token == null)
+        {
+            $(".message-error").text("Token mancante");
+            $(".message-error").show();
+            $("#bottone-disabilita").show();
+            $("#bottone-abilita").hide();
+        }
+        else
+		$("#bottone-abilita").click(function(){
+			$(".message-error").text("");
+			$(".message-error").hide();
+			var pass = $("#password").val();
+			var pass1 = $("#password1").val();
+			if(pass.length<6)
+				return;
+			if (!pass && !pass1) {
+				$(".message-error").text("Compilare tutti i campi");
+				$(".message-error").show();
+			}
+			else if (pass !== pass1) {
+				$(".message-error").text("Le due password devono essere uguali");
+				$(".message-error").show();
+			}
+			else
+			{
+				$.ajax({
+					//url:SERVER_URL+"users/password/reset/"+uidb64[0]+"/"+token[0]+"/",
+					url:SERVER_URL+"users/password/reset/"+uidb64+"/"+token+"/",
+					type:"POST",
+					data:JSON.stringify({new_password: pass}),
+					contentType:"application/json",
+					dataType:"json",
+					success: function(){
+						$(".loginuser").hide();
+						$(".message-error").html("Password resettata con successo");
+						$(".message-error").show();
+						window.location.href=URL_FRONTEND+"#"
+					},
+					error: function (xhr, ajaxOptions, thrownError) {
+						if(xhr.status==400)
+						{
+							console.log(xhr)
+							alert(xhr.responseJSON);
+						}
+						if(xhr.status==500)
+						{
+							alert("Errore server");
+						}
+					}
+				})
+			}
+		});
+	});
+
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,146 @@
+<style>
+		datepicker ._720kb-datepicker-calendar {
+				width: 30% !important;
+		}
+		datepicker input{
+			width: 200px !important;
+		}
+		._720kb-datepicker-active{
+			background: #0e388c !important;
+			color: white !important;
+		}
+		._720kb-datepicker-calendar-header{
+			background: #0e388c !important;
+			color: white !important;
+		}
+		._720kb-datepicker-calendar-header-middle span, ._720kb-datepicker-calendar-month-button{
+			color: white !important;
+		}
+		._720kb-datepicker-calendar-days-header{
+			background: white !important;
+			/* border: 1px solid #0e388c !important; */
+		}
+		._720kb-datepicker-calendar-days-header div{
+			color: #0e388c !important;
+		}
+</style>
+
+<md-dialog aria-label="CreaModifica" id="inputDialog">
+	<form ng-cloak>
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>{{action}}{{schema.title}}</h2>
+				<!--tooltip-->
+				<md-button aria-label="" style="cursor:default">
+					<md-icon class="fa fa-question-circle"></md-icon>
+					<md-tooltip md-direction="bottom">
+						<span>
+								Da qui puoi creare o modificare una voce. Una volta inseriti i dati, clicca su "Salva".
+						</span>
+					</md-tooltip>
+				</md-button>
+				<!--tooltip-->
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="cancel()">
+					<md-icon class="fa fa-times" aria-label="Close dialog"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+
+		<md-dialog-content>
+			<div class="md-dialog-content">
+				<div class="body-box1">
+					<div>
+						<div id="mod_{{schema.label}}" class="w3-container tab_mod">
+							<form name="submit" ng-submit="save()">
+								<div ng-repeat="item in schema.items">
+									<md-input-container class="md-input-focused">
+										<label for="{{item.label}}" ng-show="item.type != 'file' || (item.type == 'file' && item.label=='files_field') || (item.type == 'file' && item.label=='attachments')">{{item.title}}</label>
+										<input ng-if="item.type == 'text'" type="text" id="{{item.label}}" name="{{item.label}}" ng-model="model[item.label]" ng-required="item.required"
+										/>
+										<input ng-if="item.type == 'checkbox'" type="checkbox" id="{{item.label}}" name="{{item.label}}" ng-model="model[item.label]"
+										 ng-required="item.required" />
+										<textarea ng-if="item.type == 'textarea'" type="text" id="{{item.label}}" name="{{item.label}}" ng-model="model[item.label]"
+										 ng-required="item.required"></textarea>
+										<md-select ng-if="item.type==='select'" id="{{item.label}}" name="{{item.label}}" ng-model="model[item.label]" ng-required="item.required">
+											<md-option ng-repeat="option in item.options" ng-value="option.pk" ng-selected="{{option.pk===model[item.label]}}">
+												{{option.name}}
+											</md-option>
+										</md-select>
+										<md-select ng-if="item.type==='multiselect'" id="{{item.label}}" name="{{item.label}}" ng-model="model[item.label]" multiple>
+											<md-option ng-repeat="option in item.options" ng-value="option.pk">
+												{{option.name}}
+											</md-option>
+										</md-select>
+										<!-- <md-datepicker class="input_dateI" ng-if="item.type == 'dateI'" ng-model="model[item.label]" md-placeholder="Data iniziale"
+										 ng-required="item.required"></md-datepicker>
+										<md-datepicker ng-if="item.type == 'dateF'" md-min-date="model['start_date']" ng-model="model[item.label]" md-placeholder="Data finale"
+										 ng-required="item.required"></md-datepicker>  -->
+										<datepicker date-format="yyyy-MM-dd" ng-if="item.type == 'dateI'" datepicker-mobile="true">
+											<input ng-model="model[item.label]" type="text" />
+										</datepicker>
+										<datepicker date-format="yyyy-MM-dd" ng-if="item.type == 'dateF'" date-min-limit="{{model['start_date']}}" datepicker-mobile="true">
+											<input ng-model="model[item.label]" type="text" />
+										</datepicker>
+
+										<div ng-if="item.type == 'time'" class="form-group">
+											<input class="form-control" size="8" ng-model="model[item.label]" name="model[item.label]" bs-timepicker data-time-format="HH:mm"
+											 data-length="1" data-minute-step="1" data-arrow-behavior="picker" type="text" ng-required="item.required">
+										</div>
+										<input ng-if="item.type == 'radio'" type="radio" id="{{item.label}}" name="{{item.label}}" ng-model="model[item.label]" ng-required="item.required"
+										/>
+										<div class="col-sm-12" ng-if="item.type == 'file' && item.label=='attachments'">
+											<input class="inputfile" ngf-select="" ng-model="model['file']" name="file" ngf-accept="'application/pdf'" ng-required="item.required"
+											 type="file" style="padding-bottom: 5% !important;">
+											<br />
+											<img ngf-src="file" class="thumb">
+										</div>
+										<div class="col-sm-12" ng-if="item.type == 'file' && item.label=='files_field'">
+											<input class="inputfile" ngf-select="" ng-model="picFile" name="file" ngf-accept="'application/pdf'" ng-required="item.required"
+											 type="file" style="padding-bottom: 5% !important;">
+											<br />
+											<img ngf-src="picFile" class="thumb">
+											<button class="btnload" ng-if="item.type == 'file' && item.label=='files_field'" ng-click="saveFile(picFile)">Carica</button>
+										</div>
+
+									</md-input-container>
+									<!--Input dinamici-->
+									<div ng-if="item.type==='multiple_input'">
+										<button class="btn btnmargin" class="add-button-input btn" title="Aggiungi" ng-click="addNewChoice(item)">
+												<i class="fa fa-plus" aria-hidden="true"></i>
+										</button>
+										<div class="form-group" ng-repeat="choice in model[item.label] track by $index" style="display:inline;">
+											<button class="btn btnmargin" ng-click="removeNewChoice(item, $index)" title="Rimuovi">
+													<i class="fa fa-minus" aria-hidden="true"></i>
+											</button>
+											<div class="multi_input_dialog" ng-repeat="subitem in item.items" >
+												<md-input-container class="md-input-focused1">
+													<input class="email" name="email" type="email" ng-if="subitem.type==='email'" ng-pattern="/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/"
+													 ng-model="choice.email" placeholder="Inserisci {{subitem.title}}" ng-required="item.required">
+													<div ng-messages="submit.$error.pattern" role="alert">
+														<div ng-hide="!submit.$error.pattern" ng-message-exp="['pattern']">
+															Errore formato email
+														</div>
+													</div>
+													<!--coppia dose+orario-->
+													<input type="text" ng-if="subitem.type==='text'" ng-model="choice.posology" placeholder="Inserisci {{subitem.title}}" ng-required="item.required">
+													<div class="dosaget" ng-if="subitem.type==='time'" class="form1 form-group">
+														<input class="form-control" size="8" ng-model="choice.hour" placeholder="Inserisci {{subitem.title}}" name="choice[subitem.label]"
+														 bs-timepicker data-time-format="HH:mm" data-length="1" data-minute-step="1" data-arrow-behavior="picker" type="text">
+													</div>
+												</md-input-container>
+											</div>
+											<hr>
+										</div>
+									</div>
+								</div>
+								<div class="footer-box1" style="margin-top: 5%;">
+									<input ng-if="schema.object!=='files'" class="btn" type="submit" id="submit" value="Salva" ng-click="save()" />
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+		</md-dialog-content>
+	</form>
+</md-dialog>

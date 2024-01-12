@@ -1,0 +1,291 @@
+<!--Lista affiliazione-->
+<div class="body-box" ng-init="init()" ng-show="tab=='listautenti'">
+    <div class="form-group container-search_guest">
+        <input type="text" class="form-control search_guest" placeholder="Search" ng-model="text_guest" ng-change="searchGuest()"
+        style="float: right; width: 24%; margin-right: 10%; margin-top: 2%; margin-left: -33%;">
+    </div>
+    <button class="btn1" style="float: right;" title="Download PDF" ng-click="generatePDF()">
+        <i class="fa fa-download" aria-hidden="true"></i>
+    </button>
+    <div nlayout="column" class="md-inline-form">
+        <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding>
+            <span class="spanclassing">Lista utenti affiliati alla struttura scelta</span>
+            <div>
+                <!-- Table starts here -->
+                <table id="table" class="table table-hover table-mc-light-blue">
+                    <thead>
+                        <tr>
+                            <th>Nome ospite</th>
+                            <th>Tag Struttura</th>
+                            <th>Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="user in users">
+                            <td data-title="Nome ospite" ng-click="openDetailGuest(user.pk, $event)">
+                                {{user.first_name}} {{user.last_name}}<br/>
+                                <span class="emailtable">{{user.email}}</span>
+                            </td>
+                            <td data-title="Tag Struttura" ng-if="struct_affiliation.structure.pk==structure_id" ng-repeat="struct_affiliation in user.structureaffiliation_set">
+                                <span ng-repeat="mymedtag in struct_affiliation.mymedtag_set"><span ng-if="mymedtag.active==true" >{{mymedtag.code || '-'}}</span></span>
+                            </td>
+                            <td data-title="Azioni">
+                                <button class="btnlista" title="Registra familiare" ng-click="addParent(user.pk)"><i class="fa fa-user-plus" aria-hidden="true"></i></button>
+                                <button class="btnlista" title="Registra uscita" ng-click="showConfirmOut(user)"><i class="fa fa-external-link" aria-hidden="true"></i></button>
+                                <button class="btnlista" title="Terapie ospite" ng-click="addTherapy(user.pk)"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+                                <button class="btnlista" title="Modifica tag struttura" ng-click="modalChangeMMT(user)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </md-content>
+        <ul class="pagination">
+            <li ng-click="loadPrevious()" ng-class="currentPage>=2 ? 'paginate_button previous' : 'paginate_button previous disabled'">
+                <a href="">«</a>
+            </li>
+            <li ng-repeat="p in range(1,total_page)" id="range_{{p}}" ng-class="currentPage==(p) ? 'paginate_button active': 'paginate_button'"
+                ng-click="gotoPage(p)"><a href="">{{p}}</a></li>
+            <li ng-click="loadNext()" ng-class="currentPage <= total_page-1 ? 'paginate_button next' : 'paginate_button next disabled'">
+                <a href="">»</a>
+            </li>
+        </ul>
+        <button class="btn1" title="Aggiungi nuovo ospite" ng-click="newGuest()"><i class="fa fa-plus" aria-hidden="true"></i>Aggiungi Nuovo</button>
+    </div>
+</div>
+<!--FAMILIARE-->
+<div class="body-box" ng-show="tab == 'addfamily'">
+    <div nlayout="column" class="md-inline-form">
+        <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding>
+            <span class="spanclassing">Familiare</span>
+            <md-icon class="fa fa-chevron-circle-left" ng-click="tab = 'listautenti'; email=''" aria-hidden="true" title="Indietro"></md-icon>
+            <div>
+                <md-input-container>
+                    <label>Email</label>
+                    <input ng-model="email" type="email">
+                </md-input-container>
+            </div>
+        </md-content>
+    </div>
+    <button class="btn" title="verifica se il familiare è già inserito" ng-disabled="!email" ng-click="verifyGuestFamiliare($event)">Verifica Utente</button>
+</div>
+<div class="user-box" ng-show="tab == 'registrationParent' ">
+    <div class="header-box"> Nuova registrazione familiare
+        <md-button aria-label="" style="cursor:default">
+            <md-icon class="fa fa-question-circle"></md-icon>
+            <md-tooltip md-direction="bottom">
+                <span>
+                    Qui puoi registrare un nuovo familiare dell'ospite presente in struttura.
+                </span>
+            </md-tooltip>
+        </md-button>
+        <md-icon class="fa fa-chevron-circle-left" ng-click="tab = 'listautenti'; email=''" aria-hidden="true" title="Indietro"></md-icon>
+    </div>
+    <div class="body-box">
+        <form class="ingressiinclude" name="registerForm" layout="column" layout-fill layout-padding layout-margin>
+            <md-input-container class="login">
+                <label>
+                        Nome
+                    </label>
+                <input class="removespace" type="text" ng-model="modelProfile['first_name']" aria-label="name" required />
+            </md-input-container>
+            <md-input-container class="login">
+                <label>
+                        Cognome
+                    </label>
+                <input class="removespace" type="text" ng-model="modelProfile['last_name']" name="email" aria-label="surname" required />
+            </md-input-container>
+            <md-input-container class="login">
+                <label>
+                        Email
+                    </label>
+                <input class="removespace" type="email" ng-model="modelProfile['email']" aria-label="email" required ng-pattern="/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/"
+                />
+                <div ng-messages="registerForm.email.$error" role="alert">
+                    <div ng-hide="!registerForm.email.$error.pattern" ng-message-exp="['required', 'pattern']">
+                        Email non valida
+                    </div>
+                </div>
+            </md-input-container>
+            <md-input-container class="login">
+                <label>
+                Password <span class="errorpwd">(composta da almeno 6 caratteri)</span>
+            </label>
+                <input class="removespace" type="password" ng-model="modelProfile['password']" name="password" minlength="6" aria-label="password"
+                    required />
+                <div ng-messages="registerForm.password.$error" role="alert">
+                    <div class="errorpwd1" ng-hide="!registerForm.password.$error.minlength" ng-hide="minlength" ng-message-exp="minlength">
+                        La password deve essere composta da almeno 6 caratteri
+                    </div>
+                </div>
+            </md-input-container>
+            <md-input-container class="login">
+                <label>
+                    Ripeti Password <span class="errorpwd">(composta da almeno 6 caratteri)</span>
+                </label>
+                <input class="removespace" type="password" ng-model="modelProfile['password_check']" name="password_repeat" aria-label="password_repeat"
+                    required />
+            </md-input-container>
+            <!--<md-input-container class="login">
+                <label>
+					Data di nascita
+                </label>
+				<md-datepicker class="inputnascita"  ng-model="modelProfile['birthday']" ng-required="item.required"></md-datepicker>
+			</md-input-container>-->
+
+        </form>
+        <div class="footer-box1">
+            <input class="btn" type="submit" id="submit" value="Registra" ng-click="newParent()" />
+        </div>
+    </div>
+</div>
+
+<!--Ospite-->
+<div class="body-box" ng-init="user_id=''" ng-show="tab == 'adduser'">
+    <div nlayout="column" class="md-inline-form">
+        <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding>
+            <span class="spanclassing">Ospite</span>
+            <md-icon class="fa fa-chevron-circle-left" ng-click="tab = 'listautenti'; email=''" aria-hidden="true" title="Indietro"></md-icon>
+            <div>
+                <md-input-container>
+                    <label>Email</label>
+                    <input ng-model="email" type="email">
+                </md-input-container>
+            </div>
+        </md-content>
+    </div>
+    <button class="btn" title="verifica ospite" ng-disabled="!email" ng-click="verifyGuest()">Verifica Utente</button>
+</div>
+<div class="user-box" ng-show="tab == 'registration' ">
+    <div class="header-box"> Nuova registrazione
+        <md-button aria-label="" style="cursor:default">
+            <md-icon class="fa fa-question-circle"></md-icon>
+            <md-tooltip md-direction="bottom">
+                <span>
+                    Qui puoi registrare un nuovo ospite all'interno della struttura di riferimento.
+                </span>
+            </md-tooltip>
+        </md-button>
+        <md-icon class="fa fa-chevron-circle-left" ng-click="tab = 'listautenti'; email=''" aria-hidden="true" title="Indietro"></md-icon>
+    </div>
+    <div class="body-box">
+        <ng-include class="ingressiinclude" src="'templates/registrationGuest.html'"></ng-include>
+    </div>
+</div>
+
+
+<!--MODALE UPLOAD-->
+<div id="modal_upload" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+                <h4 class="modal-title">Aggiungi nuova terapia</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <!--label class="col-sm-4 control-label" for="descrizione">Descrizione</label-->
+                                <div class="col-sm-12">
+                                    <input ngf-select="" ng-model="picFile" name="file" ngf-accept="'application/pdf'" required="" type="file">
+                                    <br />
+                                    <div ng-message="">È possibile inserire file di tipo PDF</div>
+                                    <img ngf-src="picFile" class="thumb">
+                                    <button class="btnload" ng-click="uploadTherapy(picFile)">Carica</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btnload" ng-click="allTherapy()">Vedi tutte le terapie</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--VISUALIZZAZIONE TERAPIE-->
+<div id="modal_therapy" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+                <h4 class="modal-title">Terapie</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <table id="table" class="table table-hover table-mc-light-blue">
+                                        <thead>
+                                            <tr>
+                                                <th>Nome</th>
+                                                <th>Documenti</th>
+                                                <th>Data inserimento</th>
+                                                <th>Azioni</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="therapy in therapies" ng-show="therapy.attachments.length>0">
+                                                <td data-title="Terapia associata">{{therapy.name || '-'}}</td>
+                                                <td data-title="Terapia associata">
+                                                    <div ng-repeat="attachment in therapy.attachments track by $index">
+                                                    <i class="fa fa-file-o" aria-hidden="true"></i>
+                                                    <a class="ng-binding" ng-if="attachment && attachment.document" ng-click="openFileTherapies(attachment.document)" no-href="">Terapia_{{therapy.created | date:"yyyy-MM-dd"}}</a></br>
+                                                    <a class="ng-binding" ng-if="!attachment || attachment.document" no-href="">-</a>
+                                                    </div></br>
+                                                </td>
+                                                <td data-title="Terapia associata">{{therapy.created | date:"dd/MMS/yyyy h:mma" || '-'}}</td>
+                                                <td ng-repeat="attachment in therapy.attachments track by $index"><i class="fa fa-times" title="elimina la terapia"
+                                                aria-hidden="true" ng-click="deleteDocumentTherapy($event, attachment.pk, user_id)" style="margin-top:0!important"></i></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--MODALE CAMBIO MYMEDTAG-->
+<div id="modal_change_tag" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+                <h4 class="modal-title">Cambia o aggiungi un nuovo mymedtag relativo alla struttura</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <md-input-container>
+                                        <label>MyMedTagCode</label>
+                                        <input ng-model="code" type="text">
+                                    </md-input-container>
+                                    <div class="footer-box1">
+                                        <input class="btn" type="submit" id="submit" value="Salva" ng-click="editMMTC(structureaffiliation)" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

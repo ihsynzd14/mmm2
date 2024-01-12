@@ -1,0 +1,27 @@
+<div ng-controller="registrationController">
+  <div ng-init="init()">
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <div class="body-box1">
+          <div>
+            <div id="mod_containergeneral" class="w3-container tab_mod">
+              <form name="submit" id="form" action="javascript:;">
+                <div id="tabContainer" ng-cloak>
+                  <md-content id="editprofile" class="md-padding">
+                    <md-tabs class="md-accent" >
+                      <ng-include src="'templates/new_profile.html'"></ng-include>
+                      <ng-include src="'templates/new_attributes.html'"></ng-include>
+                    </md-tabs>
+                  </md-content>
+                </div>
+                <div class="footer-box1">
+                  <input class="btn" type="submit" id="submit" value="Salva" ng-click="save()" ng-disabled="checkRegDisabled" />
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </md-dialog-content>
+  </div>
+</div>

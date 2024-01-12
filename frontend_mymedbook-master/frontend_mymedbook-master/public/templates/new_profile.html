@@ -1,0 +1,55 @@
+<style>
+  datepicker ._720kb-datepicker-calendar {
+      width: 30% !important;
+  }
+  datepicker input{
+    width: 200px !important;
+  }
+  ._720kb-datepicker-active{
+    background: #0e388c !important;
+    color: white !important;
+  }
+  ._720kb-datepicker-calendar-header{
+    background: #0e388c !important;
+    color: white !important;
+  }
+  ._720kb-datepicker-calendar-header-middle span, ._720kb-datepicker-calendar-month-button{
+    color: white !important;
+  }
+  ._720kb-datepicker-calendar-days-header{
+    background: white !important;
+    /* border: 1px solid #0e388c !important; */
+  }
+  ._720kb-datepicker-calendar-days-header div{
+    color: #0e388c !important;
+  }
+</style>
+<md-tab label="profilo" id="tab_profilo">
+  <md-tab-label>INFORMAZIONI GENERALI</md-tab-label>
+  <md-tab-body>
+    <div id="info_profilo">
+      <ul class="generalinfo-profile">
+        <li ng-repeat="item in schemaProfile">
+          <md-input-container>
+            <label for="{{item.label}}" ng-if="item.label!='password' && item.label!='password_check'">{{item.name}}</label>
+
+            <input class="inputregistrazione" ng-if="item.datatype == 'text' && item.label!='password' && item.label!='password_check'" type="text" id="{{item.label}}" name="{{item.label}}" ng-model="modelProfile[item.label]"
+              ng-maxlength="item.maxLength" ng-pattern="item.pattern" ng-disabled="item.disabled" ng-required="item.required"
+            />
+            <textarea ng-if="item.datatype == 'textarea'" type="text" id="{{item.label}}" name="{{item.label}}" ng-model="modelProfile[item.label]"
+              ng-required="item.required"></textarea>
+
+            <md-select ng-if="item.datatype == 'select'" id="{{item.label}}" name="{{item.label}}" ng-model="modelProfile[item.label]">
+              <md-option value="M">Uomo</md-option>
+              <md-option value="F">Donna</md-option>
+          </md-select>
+            <datepicker class="inputnascita" date-format="yyyy-MM-dd" ng-if="item.datatype == 'date'" datepicker-mobile="true">
+              <input ng-model="modelProfile[item.label]" ng-required="item.required" ng-keydown="disableKey($event)"
+                type="text" />
+            </datepicker>
+          </md-input-container>
+        </li>
+      </ul>
+    </div>
+  </md-tab-body>
+</md-tab>

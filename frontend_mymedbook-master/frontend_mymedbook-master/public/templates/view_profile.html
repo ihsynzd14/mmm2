@@ -1,0 +1,19 @@
+<md-tab id="tab_profile">
+    <md-tab-label>INFORMAZIONI GENERALI</md-tab-label>
+    <md-tab-body>
+        <div id="informazioni_profilo">
+            <ul class="generalinfo-profile" >
+                <li ng-repeat="item in schemaProfile">
+                    <div class="titlebold">{{item.name}}</div>:
+                      <span ng-if="item.datatype=='date'">
+                          {{profile[item.label] |date:'dd/MM/yyyy' || '-'}}
+                      </span>
+                      <span ng-if="item.datatype!='date'">
+                          {{profile[item.label] || '-'}}
+                      </span>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </md-tab-body>
+</md-tab>

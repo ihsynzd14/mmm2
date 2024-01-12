@@ -1,0 +1,44 @@
+<div class="overlay">
+	<div class="overlay_outer ">
+		<div class="overlay_inner " ng-init="init()">
+			<div class="app_view" style="display:none">
+				<a href="intent://view/#Intent;scheme=mymedtag;S.code={{code}};S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dit.netfarm.mymedbook.mymedtag;end" style="font-size: 1em;float: right;margin-right: 1em;">Vai all'app </a>
+			</div>
+			<div class="web_view" style="display:block; ">
+				<div class="boxmmt-row boxmmtimg">
+					<img src="{{mymedtag.user.avatar}}" class="imgmymedtagapp img-profile-box" style="float: none !important;">
+					<span style="font-size: 1em; margin-left: 2em; margin-top: 3em;">{{mymedtag.user.first_name || ""}} {{mymedtag.user.last_name || ""}}</span>
+				</div>
+				<div ng-include src="'../templates/templatemymedtag.html'"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--<div id="modal_MMT" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" ng-click="closeDialog()" data-dismiss="modal">
+					<i class="fa fa-times" aria-hidden="true"></i>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<div class="form-group">
+								<div class="col-sm-12" style="overflow:auto;height:25em;">
+									<a href="intent://view/#Intent;scheme=mymedtag;S.code='{{code}}';end">Vai all'app </a>
+								</div>
+								<div class="col-sm-12" style="overflow:auto;height:25em;">
+									<a href="#/login">Login</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>-->

@@ -1,0 +1,151 @@
+<style>
+  #chatbox {
+    text-align: left;
+    margin: 0 auto;
+    margin-bottom: 25px;
+    padding: 10px;
+    background: #fff;
+    height: 270px;
+    width: 430px;
+    border: 1px solid #ACD8F0;
+    overflow: auto;
+  }
+
+  #usermsg {
+    width: 84%;
+    border: 1px solid #ACD8F0;
+  }
+
+  #submit {
+    width: 60px;
+  }
+
+  .error {
+    color: #ff0000;
+  }
+
+  #menu {
+    padding: 12.5px 25px 12.5px 25px;
+  }
+
+  .welcome {
+    float: left;
+  }
+
+  .logout {
+    float: right;
+  }
+
+  .msgln {
+    margin: 0 0 2px 0;
+  }
+</style>
+
+<div class="user-box" ng-init="loadchats()">
+  <div class="header-box"> CHAT
+  </div>
+  <div class="body-box" style="height:auto;">
+    <div class="col-sm-12 row">
+      <md-content md-theme="altTheme">
+        <section>
+          <md-list layout-padding>
+            <md-list-item class="md-3-line" ng-repeat="conversation in conversations">
+              <img ng-src="{{conversation.image}}" class="md-avatar" style="padding-top: 0px; border: 1px solid blue;" ng-click="openConversation(conversation)" >
+              <div class="md-list-item-text" ng-click="openConversation(conversation)" >
+                <h3>{{conversation.title}}</h3>
+                <p>
+                  {{conversation.messages.last.text}}
+                </p>
+              </div>
+              <i class="fa fa-trash" aria-hidden="true" ng-click="conferma($event, conversation.pk)" title="Elimina la conversazione" style="margin-top: 6vh;"></i> 
+            </md-list-item>
+          </md-list>
+        </section>
+      </md-content>
+    </div>
+
+    <div align="center">
+      <button class="btn" title="nuova conversazione" ng-click="overlayNewConversation($event)">Nuova conversazione</button>
+    </div>
+  </div>
+</div>
+
+<!--visualizzazione conversazione-->
+<div id="modal_view_conversation" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+            <i class="fa fa-times" aria-hidden="true"></i>
+        </button>
+        <h4 class="modal-title">{{conversation_choise.title}}</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <div class="form-group">
+                <div class="row">
+                  <div id="wrapper">
+                    <div id="menu">
+                      <div style="clear:both"></div>
+                    </div>
+                    <div id="chatbox" style="width: 93%; height: 291px; padding-top: 10px;">
+                      <div id="reload_messages" style="float: right;"><i class="fa fa-repeat" aria-hidden="true" ng-click="getMessages(conversation_choise.pk, first_message.created)"></i></div>
+                      <div style="padding-top: 5px; padding-bottom: 5px;" ng-repeat="message in messages">
+                        <span>({{message.data_creazione| date:'dd/MM/yyyy h:mma'}}) </span><span style="font-weight: bold;">{{message.user.first_name}} {{message.user.last_name}}: </span><span> {{message.text}}</span><br>
+                      </div>
+                    </div>
+                    <form name="message">
+                      <textarea name="usermsg" type="text" id="usermsg" size="63" style="margin-left: 3.5%; width: 82.5%;" ng-model="send_message"></textarea>
+                      <input name="submitmsg" type="submit" id="submitmsg" value="Invia" ng-click="sendMessage()" />
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--visualizzazione conversazione-->
+<div id="modal_new_conversation" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+            <i class="fa fa-times" aria-hidden="true"></i>
+        </button>
+        <h4 class="modal-title">Nuova conversazione</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <div class="form-group">
+                <div class="row">
+                  <form>
+                    <input type="text" ng-model="model['members']" placeholder="Utenti" uib-typeahead="user.email for user in allUsers" typeahead-loading="loadingUsers"
+                      typeahead-no-results="noResults" class="form-control" style="width: 64%; margin-left: 6%;" id="usermsg"
+                      required>
+                    <i ng-show="loadingUsers" class="glyphicon glyphicon-refresh"></i>
+                    <div ng-show="noResults">
+                      <i class="glyphicon glyphicon-remove"></i> No Results Found
+                    </div>
+                    <textarea name="usermsg" type="text" id="usermsg" placeholder="Scrivi qui un messaggio di benvenuto alla conversazione" size="63"
+                      style="height: 54vh; margin-left: 6%; margin-top: 6%; width: 88%;" ng-model="text" required></textarea>
+                    <input align='center' type="submit" id="submitmsg" value="Invia" ng-click="createConversation()" style="margin-top: 10%; margin-left: 43%;"
+                    />
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

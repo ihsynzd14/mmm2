@@ -1,0 +1,52 @@
+<div class="user-box allarmi">
+    <!--Lista ALLARMI-->
+    <div class="body-box"  ng-click='pauseAudio()'>
+        <div style="display:none">
+            <audio id="audio1" style="width:25%" controls>Canvas not supported</audio>
+        </div>
+        <div nlayout="column" class="md-inline-form">
+            <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding>
+                <span class="spanclassing">Lista richieste assistenza</span>
+                <div ng-show="alarms.length == 0"><span class="noerror">Non ci sono richieste assistenza</span></div>
+                <div class="table_allarmi">
+                    <input type="text" id="audioFile" value="sound/allarme.mp3" size="60" style="display:none" />
+                    <button id="playbutton" ng-click="togglePlay();" style="display:none">Play</button>
+                    <button class="btnallarme" ng-show="flag_handled==true" ng-click="getAlarms(false)" style="padding-right: 10px; margin-right: 13px;">Vedi da gestire</button>
+                    <button class="btnallarme" ng-hide="flag_handled==true" ng-click="getAlarms(true)" style="padding-right: 10px; margin-right: 13px;">Vedi tutti</button>
+                    <button class="btnallarme" style="float: right; margin-right: 12px;" title="Storico Allarmi" ng-click="downloadPDF()">
+                        <i class="fa fa-download" aria-hidden="true"></i>
+                    </button>
+                    <!-- Table starts here -->
+                    <table ng-show="alarms.length != 0" id="table" class="table table-hover table-mc-light-blue">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Richiedente</th>
+                                <th>Email</th>
+                                <th>Recapito Telefonico</th>
+                                <th>Posizione</th>
+                                <th>Gestito da</th>
+                                <th>Gestito</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="alarm in alarms">
+                                <td data-title="Data">{{alarm.date | date:"dd/MM/yyyy HH:mm"}}</td>
+                                <td data-title="Richiedente">{{alarm.affiliation.user.first_name}} {{alarm.affiliation.user.last_name}}</td>
+                                <td data-title="Email" ng-click="openDetailCOC(alarm.affiliation.user.pk, $event)">{{alarm.affiliation.user.email}}</td>
+                                <td data-title="Recapito Telefonico">{{alarm.affiliation.user.phone || '-'}}</td>
+                                <td data-title="Posizione"><a target="_blank" href="https://www.google.com/maps/place/{{alarm.latlng.coordinates[0]}},{{alarm.latlng.coordinates[1]}}">Link</a></td>
+                                <td data-title="Gestito da">{{alarm.handler.first_name}} {{alarm.handler.last_name}}</td>
+                                <td data-tile="Evaso">
+                                    <md-checkbox class="alarmcheck md-primary" ng-disabled="alarm.handled==true" type="checkbox" flex ng-model="alarm.handled"
+                                        ng-change="onoffAlarmCOC(alarm)">
+                                    </md-checkbox>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </md-content>
+        </div>
+    </div>
+</div>

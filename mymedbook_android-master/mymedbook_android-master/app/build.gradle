@@ -1,0 +1,122 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
+apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+apply plugin: 'realm-android'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
+    defaultConfig {
+        applicationId "it.netfarm.mymedbook.mymedtag"
+        minSdkVersion 17
+        targetSdkVersion 28
+        versionCode 27
+        versionName "1.2.4"
+        vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig getSigningConfig()
+            android.applicationVariants.all { variant ->
+                variant.outputs.all {
+                    outputFileName = "${variant.name}-${variant.versionName}.apk"
+                }
+            }
+
+        }
+    }
+
+    signingConfigs {
+        config_release {
+            keyAlias 'mymedtag'
+            keyPassword 'mymedtag'
+            storeFile file('../keystore.jks')
+            storePassword 'mymedtag'
+        }
+    }
+    flavorDimensions "subgroup_mmt"
+
+    productFlavors {
+        mymedtag {
+            applicationId "it.netfarm.mymedbook.mymedtag"
+            buildConfigField 'String', 'CLIENT_ID', '"it.netfarm.mymedbook.mymedtag"'
+            buildConfigField "String", "BASE_URL", "\"https://www.mymedbook.it/\""
+            resValue "string", "app_name", "MyMedBook"
+            dimension "subgroup_mmt"
+        }
+        cdv {
+            applicationId "it.netfarm.mymedbook.cdv"
+            buildConfigField 'String', 'CLIENT_ID', '"it.netfarm.mymedbook.cdv"'
+            buildConfigField "String", "BASE_URL", "\"https://www.mymedbook.it/\""
+            resValue "string", "app_name", "CDV"
+            dimension "subgroup_mmt"
+        }
+        local {
+            applicationId "it.netfarm.mymedbook.mymedtag.locale"
+            buildConfigField 'String', 'CLIENT_ID', '"it.netfarm.mymedbook.mymedtag"'
+            buildConfigField "String", "BASE_URL", "\"http:lust:8080/\""
+            applicationIdSuffix "local"
+            resValue "string", "app_name", "MyMedBook Local"
+            versionNameSuffix '-LOCAL'
+            dimension "subgroup_mmt"
+        }
+
+
+    }
+}
+
+dependencies {
+    def supportLibrary = '28.0.0'
+    def googleApi = '11.8.0'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile "com.android.support:appcompat-v7:$supportLibrary"
+    compile "com.android.support:appcompat-v7:$supportLibrary"
+    compile "com.android.support:design:$supportLibrary"
+    compile "com.android.support:support-v4:$supportLibrary"
+    compile "com.android.support:gridlayout-v7:$supportLibrary"
+    compile "com.android.support:cardview-v7:$supportLibrary"
+    compile "com.android.support:recyclerview-v7:$supportLibrary"
+    compile "com.android.support:customtabs:$supportLibrary"
+    compile "com.google.android.gms:play-services-location:$googleApi"
+    compile "com.google.firebase:firebase-core:$googleApi"
+    compile "com.google.firebase:firebase-messaging:$googleApi"
+
+    compile 'com.android.support:multidex:1.0.2'
+
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
+        transitive = true;
+    }
+
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    implementation 'com.github.jkwiecien:EasyImage:1.3.1'
+    implementation 'io.reactivex:rxjava:1.2.1'
+    implementation 'io.reactivex:rxandroid:1.2.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    implementation 'com.facebook.fresco:fresco:0.14.1'
+    implementation 'com.github.AndroidDeveloperLB:AutoFitTextView:4'
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+    implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+}
+apply plugin: 'com.google.gms.google-services'

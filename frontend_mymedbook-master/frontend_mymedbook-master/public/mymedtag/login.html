@@ -1,0 +1,56 @@
+<div class="col-xs-7" ng-controller="loginController">
+	<!-- LOGIN -->
+	<div class="loginuser" id="login">
+		<h3 class="md-display-1">
+			Accedi
+			<md-button aria-label="{{tooltip1}}" style="cursor:default">
+				<md-icon class="fa fa-question-circle"></md-icon>
+				<md-tooltip md-direction="bottom">
+					<span>
+                            Se hai gi&agrave; effettuato la registrazione, inserisci la tua e-mail e la password per accedere a MyMedBook.
+                        </span>
+				</md-tooltip>
+			</md-button>
+		</h3>
+		<form name="loginForm" layout="column" layout-fill layout-padding layout-margin>
+			<md-input-container class="login">
+				<label>
+                        Email
+                    </label>
+				<input class="email" type="email" ng-model="email" md-no-autogrow aria-label="email" name="email" ng-pattern="/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/"
+				 required/>
+				<div ng-messages="loginForm.email.$error" role="alert">
+					<div ng-hide="!loginForm.email.$error.pattern" ng-message-exp="['required', 'pattern']">
+						Email non valida
+					</div>
+				</div>
+			</md-input-container>
+			<md-input-container class="login">
+				<label>
+                        Password
+                    </label>
+				<input type="password" ng-model="password" name="password" minlength="6" aria-label="password" required/>
+				<div ng-messages="loginForm.password.$error" role="alert">
+					<div ng-hide="!loginForm.password.$error.minlength" ng-hide="minlength" ng-message-exp="minlength">
+						La password deve essere composta da almeno 6 caratteri
+					</div>
+				</div>
+			</md-input-container>
+			<div class="login1" layout="row" layout-align="space-between center">
+				<!--<a no-href ng-click="changeView('login','recuperapassword')">-->
+				<a no-href>
+					<md-tooltip md-direction="bottom">
+						<span>
+                            Sezione in lavorazione
+                        </span>
+					</md-tooltip>Hai dimenticato la password?</a>
+			</div>
+			<button class="btn md-raised md-primary" ng-click="login()" aria-label="login" ng-disabled="">
+                    Accedi
+                </button>
+		</form>
+	</div>
+	<md-toolbar ng-show="login.error" class="md-warn" layout="row" layout-fill layout-padding layout-margin>
+		<p class="md-body-1">{{ login.error }}</p>
+	</md-toolbar>
+</div>

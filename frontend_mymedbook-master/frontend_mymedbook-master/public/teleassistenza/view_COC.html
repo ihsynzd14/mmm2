@@ -1,0 +1,86 @@
+<style>
+  md-tab-content {
+    left: 64px !important;
+  }
+
+  md-tabs {
+    overflow-y:auto !important;
+  }
+
+  .table {
+    width: 84%;
+    margin-left: -1px;
+  }
+
+  ul {
+    list-style-type: none;
+  }
+
+  md-tabs-content-wrapper {
+    padding-top: 26px;
+  }
+</style>
+<div>
+  <md-tab id="tab_profile" ng-repeat="item in tabs_structure track by $index">
+    <md-tab-label>{{item.structure.name}}</md-tab-label>
+    <md-tab-body>
+      <div id="COC">
+        <span class="titlebold">Seriali validi:</span>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Seriale</th>
+              <th>Periodo validità</th>
+              <th>Inizio validità dell'associazione</th>
+              <th>Fine validità dell'associazione</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="serial in item.serials">
+              <td>{{serial.serial}}</td>
+              <td>{{serial.duration}} Mesi</td>
+              <td>{{serial.start_date_validation}}</td>
+              <td>{{serial.end_date_validation}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="titlebold">Azioni da effettuare in caso di necessità</div>
+        <ul>
+          <li style="padding-top: 2%;">
+            <span>
+              <span style="font-weight: bold; font-style: italic;">Chiamare la {{item.structure.name}}:</span>
+              {{item.structure.phone_number}}
+            </span>
+          </li>
+          <li style="padding-top: 2%;" ng-if="item.structure.mobile_number">
+            <span>
+              <span style="font-weight: bold; font-style: italic;">Inviare un SMS alla {{item.structure.name}}:</span>
+              {{item.structure.mobile_number}}
+            </span>
+          </li>
+          <li ng-repeat="action in item.actions" style="padding-top: 2%;">
+            <span>
+              <span style="font-weight: bold; font-style: italic;">{{action.name}}:</span>
+              <span ng-if="action.action_type!='circle'">{{action.value}}</span>
+              <span ng-if="action.action_type==='circle' && group.pk == action.circle" ng-repeat="group in gruppi" >{{group.name}} </span>
+            </span>
+          </li>
+        </ul>
+        <div class="titlebold">Altre informazioni</div>
+        <div ng-repeat="attributeGroup in attributeValuesCOC" ng-if="attributeGroup.structure == item.structure.pk">
+          <ul class="" style="font-size: 1em; list-style-type: none;" >
+            <li ng-repeat="field in attributeGroup.attributes" style="padding-top: 2%;">
+              <span style="font-weight: bold; font-style: italic;">{{field.attribute.name}}</span>:
+              <span ng-if="field.attribute.datatype==='text'">
+                  {{field.value  || '-'}}
+              </span>
+              <span ng-if="field.attribute.datatype==='boolean' && (field.value=='False' || !field.value)">NO</span>
+              <span ng-if="field.attribute.datatype==='boolean' && field.value">SI</span>
+              <span ng-if="field.attribute.datatype==='enum'" ng-repeat="enum in field.enum"><span ng-repeat="value in field.value" ng-if="enum.pk==value">{{enum.value || '-'}}, </span></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </md-tab-body>
+  </md-tab>
+</div>

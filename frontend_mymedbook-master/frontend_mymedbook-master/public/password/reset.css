@@ -1,0 +1,161 @@
+body {
+    font-family: "Open Sans", sans-serif !important;
+    height: 100vh;
+    overflow: hidden;
+}
+
+button,
+.btn {
+    border-radius: 0 !important;
+    text-shadow: none;
+    transition: background 0.8s ease 0s;
+}
+
+#bottone-abilita:hover,
+.btn:hover {
+    transition: background 0.8s ease 0s;
+}
+
+input,
+select,
+textarea {
+    border: 1px solid #ccc;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+input[type="checkbox"] {
+    border-color: #03b2af !important;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 5px rgba(2, 153, 102, 0.6) !important;
+    outline: 0 none !important;
+}
+
+option {
+    height: 20px;
+}
+
+label {
+    color: #555;
+    font-weight: 600;
+}
+
+#content.app-content {
+    height: 85vh;
+    overflow-y: auto;
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
+.container-fluid-choise {
+    height: 85vh;
+}
+
+.formlogin-type-container {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.formlogin-type-container button {
+    background: #03b2af none repeat scroll 0 0;
+    border: medium none;
+    color: #fff;
+}
+
+.formlogin-type-container #bottone-abilita:hover {
+    background: #03807d none repeat scroll 0 0;
+    color: #fff;
+}
+
+.formlogin-container {
+    margin-top: 18vh;
+    text-align: center;
+    width: 100%;
+}
+
+.formlogin-container .container-title {
+    border-bottom: 1px solid #e72264;
+    margin-bottom: 10px;
+}
+
+.formlogin-container h2 {
+    color: #e72264;
+    font-size: 12px;
+    margin-bottom: 0;
+}
+
+.formlogin-container label {
+    color: #555;
+    display: block;
+    font-size: 11px;
+    font-weight: normal;
+    margin-bottom: 0;
+    text-transform: uppercase;
+}
+
+.formlogin-container .container {
+    text-align: left;
+    width: 22%;
+}
+
+.formlogin-container input {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.formlogin-container button {
+    background: #03b2af none repeat scroll 0 0;
+    color: #fff;
+    margin-left: 36%;
+}
+
+.formlogin-container #bottone-abilita:hover {
+    background: #03807d none repeat scroll 0 0;
+    color: #fff;
+}
+
+.logo-login {
+    width: 20%;
+}
+
+.btn-admin:hover,
+.btn-admin:focus,
+.btn-ost:hover,
+.btn-ost:focus {
+    border-color: #03807d !important;
+}
+
+.btn-admin,
+.btn-ost {
+    background: #03807d none repeat scroll 0 0;
+    border-radius: 4px;
+    color: white;
+    font-size: x-large;
+    height: 150px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    width: 250px;
+}
+
+div.formlogin-type-container * {
+    display: block;
+    margin: 5px 0;
+    width: 50%;
+}
+
+#header {
+    background: #fff none repeat scroll 0 0;
+    border-bottom: 2px solid #03b2af;
+    border-radius: 0;
+    height: 15vh;
+    margin: 0 -15px;
+    padding: 0 15px;
+}
+
+#header img {
+    height: 12vh;
+    margin-bottom: 1.5vh;
+    margin-top: 1.5vh;
+}

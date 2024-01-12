@@ -1,0 +1,111 @@
+<md-tab label="tab_{{item.name}}" id="tab_{{item.name}}" ng-repeat="item in attributeValues">
+  <md-tab-label>{{item.name}}</md-tab-label>
+  <md-tab-body>
+    <div id="{{item.name}}">
+      <md-button aria-label="" id="helpmymedtag">
+        <md-icon class="fa fa-question-circle"></md-icon>
+        <md-tooltip md-direction="bottom">
+          <span>Seleziona, spuntando l'apposita casellina, le voci che vuoi includere tra le informazioni salvavita di MyMedTag.</span>
+        </md-tooltip>
+      </md-button>
+      <div class="soslogo-edit" style="margin-top:0.5em">
+        <img src="images/sos.png" title="MyMedTag">
+      </div>
+      <ul class="generalinfo-profile" style="padding: 5em 0 0 2em;margin: 0;">
+        <li ng-repeat="attribute in item.attributes">
+          <div style="display:inline-block;width:85%">
+            <label for="attribute_{{attribute.attribute.pk}}" ng-show="attribute.attribute.datatype !== 'label' && attribute.attribute.name.indexOf('---')<0">{{attribute.attribute.name}}</label>
+
+            <input class="inputregistrazione" ng-if="attribute.attribute.datatype == 'text'" type="text" id="attribute_{{attribute.attribute.pk}}"
+              style="border:0;border-bottom:1px solid rgba(0,0,0,0.12);" 
+              ng-model="attribute.value" />
+
+            <md-checkbox class="green md-align-top-right" ng-if="attribute.attribute.datatype == 'boolean'" type="checkbox" id="attribute_{{attribute.attribute.pk}}"
+              ng-init="attribute.value = (attribute.value === 'True');" ng-model="attribute.value"
+              flex ng-class="{'md-checked': attribute.value != null}">
+            </md-checkbox>
+
+            <md-select ng-model="attribute.value" ng-if="attribute.attribute.datatype == 'enum'" id="attribute_{{attribute.attribute.pk}}" multiple placeholder="">
+              <md-option ng-value="option.pk" ng-repeat="option in attribute.enum">{{option.value}}</md-option>
+            </md-select>
+
+            <div ng-if="attribute.attribute.datatype == 'year_with_checkbox'">
+              <md-checkbox class=" green md-align-top-right date_with_checkbox date_with_checkbox_{{attribute.attribute.pk}}" type="checkbox" id="attribute_{{attribute.attribute.pk}}"
+                flex ng-class="{'md-checked': attribute.value}" ng-change="onchangecheckbox(attribute)" ng-model="checked[attribute.attribute.pk]">
+              </md-checkbox>
+              <div class="datecheck datecheck_{{attribute.attribute.pk}}" id="date_{{attribute.attribute.pk}}" ng-show="checked[attribute.attribute.pk] || attribute.value">
+                  <b style="float: left; padding-right: 10px;">Anno insorgenza</b>
+                  <input id="input_{{attribute.attribute.pk}}" ng-model="attribute.value" type="text" style="width: 10em;border:0;border-bottom:1px solid rgba(0,0,0,0.12);" placeholder="Anno insorgenza"  ng-maxlength="4" ng-pattern="/^[0-9]*$/"/>
+              </div>
+            </div>
+            <div ng-if="attribute.attribute.datatype == 'year_with_text'">
+              <div style="display:inline-block;padding:1em 0;" class="other_pathology other_pathology_{{attribute.attribute.pk}}" id="date_{{attribute.attribute.pk}}">
+                <b style="float: left; padding: 0em 2em 0em 1em;">Patologia</b>
+                <input id="input_{{attribute.attribute.pk}}" ng-model="attribute.other" type="text" style="width: 35em;border:0;border-bottom:1px solid rgba(0,0,0,0.12);"  placeholder="Patologia" ng-change="changePathology(attribute)" />
+              </div>
+              <div style="display:inline-block;padding:1em 0;" ng-show="attribute.other.length>0" class="other_pathology other_pathology_{{attribute.attribute.pk}}" id="date_{{attribute.attribute.pk}}">
+                  <b style="float: left; padding-left:3em; padding-right: 2em;">Anno insorgenza</b>
+                  <input id="input_{{attribute.attribute.pk}}" ng-model="attribute.value" type="text" style="width: 10em;border:0;border-bottom:1px solid rgba(0,0,0,0.12);" placeholder="Anno insorgenza"  ng-maxlength="4" ng-pattern="/^[0-9]*$/"/>
+              </div>
+            </div>
+
+            <label class="label-date-with-check" ng-show="attribute.attribute.datatype == 'label'">{{attribute.attribute.name}}</label>
+          </div>
+          <md-checkbox style="margin-top:1em;" class="md-primary md-align-top-left check-salvavita" id="{{attribute.pk}}" name="{{attribute.pk}}"  ng-hide="attribute.attribute.datatype == 'label'" ng-model="attribute.lifesaver"
+            flex>
+          </md-checkbox>
+        </li>
+      </ul>
+      <!-- <div id="choiseLifesaver" ng-show="item.name==='Salvavita'" style="margin-left: 4.5%">
+        <label class="infosel">Informazioni selezionate</label>
+        <md-button aria-label="" id="">
+          <md-icon class="fa fa-question-circle material-icons" aria-hidden="true"></md-icon>
+          <md-tooltip md-direction="bottom">
+            <span>Seleziona, spuntando l'apposita casellina, le voci che vuoi includere come informazione principale tra le informazioni salvavita di MyMedTag.</span>
+          </md-tooltip>
+        </md-button>
+        <div ng-repeat="item in attributeValues">
+          <div ng-repeat="attribute in item.attributes">
+            <div class="radio" ng-if="attribute.value && attribute.lifesaver">
+              <label>
+                <md-radio-group ng-model="modelProfile['lifesaver']">
+                  <md-radio-button ng-value="attribute.pk" class="md-primary">
+                    <span style="font-weight:bold">{{attribute.attribute.name}}: </span>
+                    <span ng-switch="attribute.value">
+                  <span ng-switch-when="true">SI</span>
+                  <span ng-switch-when="false">NO</span>
+                  <span ng-switch-default>
+                    <span ng-if="attribute.attribute.datatype === 'enum'">
+                      <span ng-repeat="option in attribute.enum" ng-if="option.pk==attribute.value">{{option.value}}</span>
+                    </span>
+                     <span ng-if="attribute.attribute.datatype !== 'enum'">
+                      {{attribute.value}}
+                     </span>
+                  </span>
+                </span>
+                  </md-radio-button>
+                </md-radio-group> -->
+
+
+               <!-- <input type="radio" ng-value="attribute" ng-model="modelProfile['lifesaver']" />
+                <span style="font-weight:bold">{{attribute.attribute.name}}: </span>
+                <span ng-switch="attribute.value">
+                  <span ng-switch-when="true">SI</span>
+                  <span ng-switch-when="false">NO</span>
+                  <span ng-switch-default>
+                    <span ng-if="attribute.attribute.datatype === 'enum'">
+                      <span ng-repeat="option in attribute.enum" ng-if="option.pk==attribute.value">{{option.value}}</span>
+                    </span>
+                     <span ng-if="attribute.attribute.datatype !== 'enum'">
+                      {{attribute.value}}
+                     </span>
+                  </span>
+                </span>-->
+              <!-- </label>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </md-tab-body>
+</md-tab>

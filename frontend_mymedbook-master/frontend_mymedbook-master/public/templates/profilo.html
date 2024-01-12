@@ -1,0 +1,40 @@
+<style>
+    md-tabs {
+        height: 100% !important;
+    }
+</style>
+<div class="user-box" ng-init="init()">
+    <div class="header-box">{{profile.first_name || "-" }} {{profile.last_name}}, ecco il tuo profilo
+        <md-button aria-label="" style="cursor:default">
+            <md-icon class="fa fa-question-circle"></md-icon>
+            <md-tooltip md-direction="bottom">
+                <span>
+            Qui puoi visualizzare le informazioni che fanno parte del tuo profilo.<br/>
+            Completalo con i dettagli sul tuo stato di salute e le tue informazioni salvavita.<br/>
+            Per completare e/o modificare clicca sul pulsante 'Modifica'.
+        </span>
+            </md-tooltip>
+        </md-button>
+    </div>
+    <div class="body-box">
+        <div class="error" ng-show="mymedtag.attributes_groups.length<=0">
+            Ricordati di compilare le informazioni salvavita
+        </div>
+        <div class="divmtmedtag" ng-show="mymedtag.attributes_groups.length>0" ng-click="showDialogSalvavita($event)">
+            Visualizza il salvavita <img id="sos" src="images/sos.png" title="MyMedTag" hspace="10">
+        </div>
+        <!--TAB-->
+        <div id="tabContainer" ng-cloak>
+            <md-content id="profilo" class="md-padding">
+                <md-tabs md-dynamic-height md-border-bottom class="md-accent" md-align-tabs="{{'top'}}" md-selected="0">
+                    <ng-include src="'templates/view_profile.html'"></ng-include>
+                    <ng-include src="'templates/view_attributes.html'"></ng-include>
+                    <ng-include src="'teleassistenza/view_COC.html'"></ng-include>
+                </md-tabs>
+            </md-content>
+        </div>
+    </div>
+    <div class="footer-box">
+        <button class="btn" ng-click="edit($event)">Modifica</button>
+    </div>
+</div>

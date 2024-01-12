@@ -1,0 +1,53 @@
+<style>
+    .dossier_visibility {
+        visibility: hidden
+    }
+</style>
+<div class="user-box" ng-init="load()">
+    <div class="header-box"> Dossier Medico
+        <md-button aria-label="{{tooltip1}}" style="cursor:default">
+            <md-icon class="fa fa-question-circle"></md-icon>
+            <md-tooltip md-direction="bottom">
+                <span>Crea un dossier medico per te e per i tuoi familiari, caricando foto e/o file.
+                    <br />
+                    Mantieni in un unico posto i referti medici e le prescrizioni.
+                </span>
+            </md-tooltip>
+        </md-button>
+    </div>
+    <div class="body-box">
+        <ul class="row">
+            <p ng-if="dossiers.length<=0" style="display:none">Non sono presenti dossier</p>
+            <li class="listgroup ng-binding ng-scope col-md-3" ng-repeat="dossier in dossiers">
+                <md-content ng-class="{'dossier_visibility': dossier.user!==profile.pk}">
+                    <md-button class="btnsmall trash" title="Cancella il dossier" aria-label="" ng-click="conferma($event, dossier.pk)"
+                        ng-disabled="input_blocked">
+                        <i class="fa fa-trash-o" aria-hidden="true" hspace="20"></i>
+                    </md-button>
+                </md-content>
+                <i class="fa fa-plus-circle" aria-hidden="true" ng-click="newFile($event,dossier.pk)" title="Aggiungi file alla cartella"
+                    ng-disabled="input_blocked"></i>
+                <img src="images/folder.png" class="folderstyle" ng-click="openDetail($event,dossier)" title="Visualizza i dettagli della cartella">
+                <div>
+                    <span class="titledossier" ng-click="openDetail($event,dossier)" ng-disabled="input_blocked">{{dossier.name}}</span>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="footer-box">
+        <button class="btn" title="crea un nuovo dossier" ng-click="createNew($event)" ng-disabled="input_blocked">Crea nuovo dossier</button>
+    </div>
+</div>
+
+<!-- DETTAGLIO CARTELLA CLICCATA-->
+
+<!--<span>{{dossier.nome}}, {{dossier.codice_fiscale}}</span>
+
+                <md-content>
+                    <md-button class="btnsmall" title="Cancella il dossier" ng-click="showConfirm($event)">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    </md-button>
+                </md-content>
+                <button class="btnsmall" title="Modifica il dossier" ng-click="showDetail($event,dossier_schema, 'Modifica', dossier)">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                </button>-->

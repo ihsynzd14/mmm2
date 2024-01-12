@@ -1,0 +1,67 @@
+<div class="user-box" ng-init="init()">
+    <div class="header-box"> Impostazione della privacy
+        <md-button aria-label="" style="cursor:default">
+            <md-icon class="fa fa-question-circle"></md-icon>
+            <md-tooltip md-direction="bottom">
+                <span>
+                    Decidi se impostare il tuo profilo come pubblico oppure privato,<br/>
+                    nel caso si decida di rendere pubblico il proprio profilo, potranno essere visualizzato da terzi il proprio mymedtag sull'app.
+                </span>
+            </md-tooltip>
+        </md-button>
+    </div>
+    <div class="body-box">
+        <ul class="privacybox">
+            <h3>Profilo</h3>
+            <li class="list">Impostazioni MyMedTag</li>
+            <div class="chooseprivacy">
+                <md-switch ng-model="profile.public_lifesaver" aria-label="Switch 2" ng-true-value="true" ng-false-value="false" class="md-warn"
+                    ng-change="modifiedLifesaver()">
+                    <span ng-if="profile.public_lifesaver==true || profile.public_lifesaver=='True'"> Pubblico</span>
+                    <span ng-if="profile.public_lifesaver==false || !profile.public_lifesaver"> Privato</span>
+                </md-switch>
+            </div>
+            <li class="list">
+                <span class="ipsum">
+					<a ng-click="openDialogPrivacy()">Leggi le condizioni sulla privacy</a>
+				</span>
+            </li>
+            <!--<li class="list">Stato di salute</li>
+            <div class="chooseprivacy">
+                <md-radio-group>
+                    <md-radio-button value="Privato" class="md-primary"> Privato </md-radio-button>
+                    <md-radio-button value="Condividi">Condividi con</md-radio-button>
+                    <md-input-container class="privacyselect">
+                        <md-select ng-model="">
+                            <md-option ng-repeat="" value=""></md-option>
+                        </md-select>
+                    </md-input-container>
+                </md-radio-group>
+            </div>
+            <li class="list">Terapia</li>
+            <div class="chooseprivacy">
+                <md-radio-group>
+                    <md-radio-button value="Privato" class="md-primary"> Privato </md-radio-button>
+                    <md-radio-button value="Condividi">Condividi con</md-radio-button>
+                    <md-input-container class="privacyselect">
+                        <md-select ng-model="">
+                            <md-option ng-repeat="" value=""></md-option>
+                        </md-select>
+                    </md-input-container>
+                </md-radio-group>
+            </div>-->
+        </ul>
+    </div>
+</div>
+
+
+<!-- MODELLO VECCHIO
+<input type="radio" name="privacy_setting_3" ng-model="privacy.privacy_setting.terapia.settings" id="privacy_setting_private_3" value="private"> <label for="privacy_setting_private_3">Privato</label> 
+<input type="radio" name="privacy_setting_3" ng-model="privacy.privacy_setting.terapia.settings" id="privacy_setting_share_3" value="share_with"> <label for="privacy_setting_share_3">Condividi con:</label>
+<ui-select multiple tagging ng-model="privacy.privacy_setting.terapia.groups" ng-disabled="privacy.privacy_setting.terapia.settings != 'share_with'" theme="select2" style="width: 300px;">
+    <ui-select-match placeholder="Seleziona un gruppo...">{{$item.name}}</ui-select-match>
+    <ui-select-choices repeat="group in privacy.getGroups | filter:$select.search">
+        <div>{{group.name}}</div>
+    </ui-select-choices>
+</ui-select>
+-->

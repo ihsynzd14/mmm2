@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html lang="en" ng-app="myMedBookApp">
+
+<head>
+	<title>MyMedBook</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script src="build/_bower.js"></script>
+	<!--css-->
+	<link rel="stylesheet" type="text/css" href="build/_bower.css" />
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<script src="js/librerie/interact.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.js"></script>
+	<script src="js/librerie/angular-ui-calendar.js"></script>
+
+	<!--config-->
+	<script src="js/config.js?v=7"></script>
+	<!--app.js-->
+	<script src="js/controller/app.js?v=7"></script>
+	<!--controller-->
+	<script src="js/script.js?v=7"></script>
+	<script type="text/javascript" src="js/controller/loginController.js?v=7"></script>
+    <script type="text/javascript" src="js/controller/adminController.js?v=7"></script>
+	<!--fontawesome-->
+	<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+	<!--fontawesome-->
+	<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+</head>
+<style>
+	.md-label {
+		margin-left: 0 !important;
+		top: 56% !important;
+	}
+
+	.md-container {
+		left: 22% !important;
+		top: 74% !important;
+	}
+
+	.md-checkbox {
+		margin-left: -5% !important;
+		top: 40% !important;
+	}
+
+	.md-icon {
+		top: -21px !important;
+		left: 18px !important;
+	}
+</style>
+
+<body ng-controller="generalController">
+	<div class="col-xs-7">
+		<!-- LOGIN -->
+		<div class="loginuser" id="login">
+			<h3 class="md-display-1">
+				Accedi
+				<md-button aria-label="{{tooltip1}}" style="cursor:default">
+					<md-icon class="fa fa-question-circle"></md-icon>
+					<md-tooltip md-direction="bottom">
+						<span>
+                            Se hai gi&agrave; effettuato la registrazione, inserisci la tua e-mail e la password per accedere a MyMedBook.
+                        </span>
+					</md-tooltip>
+				</md-button>
+			</h3>
+			<form name="loginForm" layout="column" layout-fill layout-padding layout-margin>
+				<md-input-container class="login">
+					<label>
+                        Email
+                    </label>
+					<input class="email" type="email" ng-model="email" md-no-autogrow aria-label="email" name="email" ng-pattern="/^\w+([\.-]\w+)*@\w+([\.-]\w+)+$/"
+					 ng-model-options="{ updateOn: 'blur' }" required/>
+					<div ng-messages="loginForm.email.$error" role="alert">
+						<div ng-hide="!loginForm.email.$error.pattern" ng-message-exp="['required', 'pattern']">
+							Email non valida
+						</div>
+					</div>
+				</md-input-container>
+				<md-input-container class="login password_container">
+					<label>
+                        Password
+                    </label>
+					<input type="password" ng-model="password" name="password" minlength="6" aria-label="password" required/>
+					<div ng-messages="loginForm.password.$error" role="alert">
+						<div ng-hide="!loginForm.password.$error.minlength" ng-hide="minlength" ng-message-exp="minlength">
+							La password deve essere composta da almeno 6 caratteri
+						</div>
+					</div>
+				</md-input-container>
+				<div class="login1" layout="row" layout-align="space-between center">
+					<a ng-click="recuperoPassword()">
+						Hai dimenticato la password?
+					</a>
+				</div>
+				<span class="ipsum">
+					<a ng-click="openDialogPrivacy()">Leggi le condizioni sulla privacy</a>
+				</span>
+				<button class="btn md-raised md-primary" ng-click="login()" aria-label="login" ng-disabled="">
+                    Accedi
+                </button>
+				<div class="lfooter">
+					<span class="spancolor">Non hai un account?</span>
+					<a class="md-button" no-href>
+						<button class="btn" ng-click="changeView('login','newregister')">
+                            Registrati
+                        </button>
+					</a>
+				</div>
+			</form>
+		</div>
+		<md-toolbar ng-show="login.error" class="md-warn" layout="row" layout-fill layout-padding layout-margin>
+			<p class="md-body-1">{{ login.error }}</p>
+		</md-toolbar>
+
+		<!-- RECUPERO PASSWORD-->
+		<div class="loginuser" id="recuperapassword" style="display:none">
+			<h3 class="md-display-1"> Reset Password
+				<md-button aria-label="{{tooltip1}}" style="cursor:default">
+					<md-icon class="fa fa-question-circle"></md-icon>
+					<md-tooltip md-direction="bottom">
+						<span>
+                            Inserisci la tua e-mail per avviare la procedura di recupero password.
+                        </span>
+					</md-tooltip>
+				</md-button>
+			</h3>
+			<form name="resetForm" layout="column" layout-fill layout-padding layout-margin ng-submit="reset()">
+				<md-input-container class="login">
+					<label>E-mail</label>
+					<input type="email" ng-model="email" md-no-autogrow aria-label="email" required ng-pattern="/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/"
+					/>
+					<div ng-messages="loginForm.email.$error" role="alert">
+						<div ng-hide="!loginForm.email.$error.pattern" ng-message-exp="['required', 'pattern']">
+							Email non valida
+						</div>
+					</div>
+				</md-input-container>
+				<button class="btn md-raised md-primary" aria-label="reset" ng-disabled="">
+                    Invia
+                </button>
+			</form>
+			<div class="lfooter1">
+				<a id="alink" class="md-button" no-href ng-click="changeView('recuperapassword','login')">Effettua il login</a>
+			</div>
+			<md-toolbar ng-show="password.error" class="md-warn" layout="row" layout-fill layout-padding layout-margin>
+				<p class="md-body-1">{{ password.error }}</p>
+			</md-toolbar>
+		</div>
+		<!-- form per invio mail di attivazione-->
+		<div class="loginuser" id="attivazione_account" style="display:none">
+				<h3 class="md-display-1"> Attivazione account
+					<md-button aria-label="{{tooltip1}}" style="cursor:default">
+						<md-icon class="fa fa-question-circle"></md-icon>
+						<md-tooltip md-direction="bottom">
+							<span>
+								Inserisci la tua e-mail per avviare la procedura di recupero password.
+							</span>
+						</md-tooltip>
+					</md-button>
+				</h3>
+				<form name="resetForm" layout="column" layout-fill layout-padding layout-margin ng-submit="send_mail_activation_account()">
+					<md-input-container class="login">
+						<label>E-mail</label>
+						<input type="email" ng-model="email" md-no-autogrow aria-label="email" required ng-pattern="/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/"
+						/>
+						<div ng-messages="loginForm.email.$error" role="alert">
+							<div ng-hide="!loginForm.email.$error.pattern" ng-message-exp="['required', 'pattern']">
+								Email non valida
+							</div>
+						</div>
+					</md-input-container>
+					<button class="btn md-raised md-primary" aria-label="reset" ng-disabled="">
+						Invia
+					</button>
+				</form>
+				<div class="lfooter1">
+					<a id="alink" class="md-button" no-href ng-click="changeView('attivazione_account','login')">Effettua il login</a>
+				</div>
+				<md-toolbar ng-show="password.error" class="md-warn" layout="row" layout-fill layout-padding layout-margin>
+					<p class="md-body-1">{{ password.error }}</p>
+				</md-toolbar>
+			</div>
+
+		<!-- NUOVA REGISTRAZIONE -->
+		<div class="loginuser" id="newregister" style="display:none">
+			<h3 class="md-display-1">
+				Registrati
+				<md-button aria-label="{{tooltip1}}" style="cursor:default">
+					<md-icon class="fa fa-question-circle"></md-icon>
+					<md-tooltip md-direction="bottom">
+						<span>
+                            Inserisci i tuoi dati per creare un account.<br/>
+                            A seguito dell'iscrizione riceverai una notifica via e-mail all'indirizzo che ha inserito.<br/>
+                            L'iscrizione a MyMedBook &egrave; completamente gratuita.
+                        </span>
+					</md-tooltip>
+				</md-button>
+			</h3>
+			<form name="registerForm" layout="column" layout-fill layout-padding layout-margin>
+				<md-input-container class="login">
+					<label>
+                        Nome
+                    </label>
+					<input class="removespace" type="text" ng-model="nome" aria-label="name" required />
+				</md-input-container>
+				<md-input-container class="login">
+					<label>
+                        Cognome
+                    </label>
+					<input class="removespace" type="text" ng-model="cognome" name="email" aria-label="surname" required />
+				</md-input-container>
+				<md-input-container class="login">
+					<label>
+                        Email
+                    </label>
+					<input class="removespace" type="email" ng-model="email" aria-label="email" required ng-pattern="/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/"
+					/>
+					<div ng-messages="registerForm.email.$error" role="alert">
+						<div ng-hide="!registerForm.email.$error.pattern" ng-message-exp="['required', 'pattern']">
+							Email non valida
+						</div>
+					</div>
+				</md-input-container>
+				<md-input-container class="login">
+					<label>
+                        Password <span class="errorpwd">(composta da almeno 6 caratteri)</span>
+                    </label>
+					<input class="removespace" type="password" ng-model="password" name="password" minlength="6" aria-label="password" required
+					/>
+					<div ng-messages="registerForm.password.$error" role="alert">
+						<div class="errorpwd1" ng-hide="!registerForm.password.$error.minlength" ng-hide="minlength" ng-message-exp="minlength">
+							La password deve essere composta da almeno 6 caratteri
+						</div>
+					</div>
+				</md-input-container>
+				<md-input-container class="login">
+					<label>
+                        Ripeti Password <span class="errorpwd">(composta da almeno 6 caratteri)</span>
+                    </label>
+					<input class="removespace" type="password" ng-model="password_check" name="password_repeat" aria-label="password_repeat"
+					 required />
+					<!--<div ng-messages="registerForm.password_repeat.$error" role="alert">
+						<div class="errorpwd1" ng-hide="password_repeat && !registerForm.password_repeat.$error.minlength" ng-message-exp="minlength">
+							La password deve essere composta da almeno 6 caratteri
+						</div>
+					</div>-->
+				</md-input-container>
+				<div style="margin-top: 5%; margin-left: 2%;">
+					<input ng-model="privacy['profilazione']" type="radio" name="profilazione" value="profilazione" required/>Consenso espresso
+					per l'utilizzo di cookie e altre tecnologie di profilazione (obbligatorio)<br>
+					<input ng-model="privacy['posizione']" type="radio" name="posizione" value="posizione" required/>Consenso a condividere
+					la tua posizione geografica (obbligatorio)<br>
+					<input ng-model="privacy['trasferimento']" type="radio" name="trasferimento" value="trasferimento" required/>Consenso
+					al trasferimento dei miei dati, in forma anonima A TERZI partner di MEDBOOK srl. (obbligatorio)<br>
+					<input ng-model="privacy['Informativa']" type="radio" name="Informativa" value="Informativa" required/>L’informativa
+					è stata letta e compresa (obbligatorio)<br>
+
+					<br/>
+					<span class="ipsum">
+						<a ng-click="openDialogPrivacy()" style="margin-left: 4%;">Leggere le condizioni sulla privacy</a>
+					</span>
+					<br/>
+				</div>
+				<br/><br/>
+				<button class="btn md-raised md-primary" ng-click="registrazione()" aria-label="login" ng-disabled="">
+                    Registra
+                </button>
+				<div class="lfooter">
+					<a id="alink" no-href ng-click="changeView('newregister','login')">
+                        Hai gi&agrave; completato la registrazione? Effettua il login.
+                    </a>
+				</div>
+			</form>
+			<md-toolbar ng-show="register.error" class="md-warn" layout="row" layout-fill layout-padding layout-margin>
+				<p id="hidden" class="md-body-1">{{ register.error }}</p>
+			</md-toolbar>
+		</div>
+	</div>
+	<div id="modal_privacy" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" ng-click="closeDialogPrivacy()" data-dismiss="modal">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+					<h4 class="modal-title">Condizioni sulla la privacy</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<div class="form-group">
+									<!--label class="col-sm-4 control-label" for="descrizione">Descrizione</label-->
+									<div class="col-sm-12" style="overflow:auto;height:25em;">
+										<ng-include src="'templates/privacy_text.html'"></ng-include>
+									</div>
+								</div>
+								<!--<div align="center" style="margin-top: 50px;">
+                                    <button class="btn btn-sm btn-primary" ng-click="closeModalUpload()">Salva</button>
+                                </div>-->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="modal_user_not_active" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" ng-click="closeDialogActivation()" data-dismiss="modal">
+							<i class="fa fa-times" aria-hidden="true"></i>
+						</button>
+						<h4 class="modal-title">Attenzione, questo account non è attivo.</h4>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="panel panel-default">
+								<div class="panel-body">
+									<div>
+										<p>
+											Si prega di controllare nella propria mailbox, eventualmente nella cartella Spam, la presenza della mail di attivazione.
+										</p>
+										<p>
+											Se non si è ricevuta alcuna email di attivazione al momento della sua registrazione,
+											è possibile inviarne una nuova cliccando sul pulsante "Invia mail".
+										</p>
+									</div>
+									<div align="center" style="margin-top: 50px;">
+										<button class="btn btn-sm btn-primary" ng-click="invioMailAttivazione()">Invia mail</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+</body>
+
+</html>

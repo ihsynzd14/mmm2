@@ -1,0 +1,75 @@
+<style>
+  md-tab-content {
+    left: 64px !important;
+  }
+
+  md-select {
+    margin: 14% 0 0 !important;
+  }
+</style>
+
+<div ng-init="initCOC(user_aff)">
+  <md-tab id="tab_profile" ng-repeat="elem in tabs_structure track by $index">
+    <md-tab-label>{{elem.structure.name}}</md-tab-label>
+    <md-tab-body>
+      <div id="COC" style="margin-top: 2%; margin-bottom: 40px;" ng-if="path.indexOf('COC')<0">
+        <div class="titlebold">Azioni da effettuare in caso di necessità</div>
+        <md-input-container>
+          <label for="call">Chiamare un numero scelto: </label>
+          <input class="" type="text" id="call" name="call" ng-model="modelCOC[elem.structure.pk]['call']" ng-change="checkInp(modelCOC[elem.structure.pk]['call'])" />
+        </md-input-container>
+        <md-input-container>
+          <label for="sms">Inviare SMS: </label>
+          <input class="" type="text" id="sms" name="sms" ng-model="modelCOC[elem.structure.pk]['sms']" ng-change="checkInp(modelCOC[elem.structure.pk]['call'])" />
+        </md-input-container>
+        <md-input-container>
+          <label for="email">Inviare una mail: </label>
+          <input class="" type="email" id="email" name="email" ng-model="modelCOC[elem.structure.pk]['email']" />
+        </md-input-container>
+        <div>
+          <label for="circle">Inviare messaggi ad un gruppo di MMB:  </label>
+          <button class="btn btnmargin" class="add-button-input btn" title="Aggiungi" ng-click="addNewChoiceCircle(elem.structure.pk)">
+              <i class="fa fa-plus" aria-hidden="true"></i>
+          </button>
+          <div class="form-group" ng-repeat="choice in modelCOC[elem.structure.pk]['circle'] track by $index" style="display:inline;">
+            <button class="btn btnmargin" ng-click="removeNewChoiceCircle(elem.structure.pk, $index)" title="Rimuovi">
+                <i class="fa fa-minus" aria-hidden="true"></i>
+            </button>
+            <md-input-container class="md-input-focused1 md-input-COC-Select">
+              <md-select id="circle" ng-model="modelCOC[elem.structure.pk]['circle'][$index]">
+                <md-optgroup>
+                  <md-option ng-value=""></md-option>
+                  <md-option ng-value="option.pk" ng-repeat="option in gruppi">{{option.name}}</md-option>
+                </md-optgroup>
+              </md-select>
+            </md-input-container>
+            <hr>
+          </div>
+        </div>
+      </div>
+      <div class="titlebold" ng-if="attributeGroup.structure == elem.structure.pk && path.indexOf('COC') >= 0"> Altre Informazioni</div>
+      <div ng-repeat="attributeGroup in attributeValuesCOC" ng-if="attributeGroup.structure == elem.structure.pk && path.indexOf('COC') >= 0">
+        <ul class="generalinfo-profile" style="padding-left: 0px;">
+          <li ng-repeat="attribute in attributeGroup.attributes">
+            <md-input-container>
+              <label for="{{attribute.pk}}">{{attribute.attribute.name}}</label>
+
+              <input class="inputregistrazione" ng-if="attribute.attribute.datatype == 'text'" type="text" id="{{attribute.pk}}" name="{{attribute.pk}}"
+                ng-model="attribute.value" />
+
+              <md-checkbox class="green md-align-top-right" ng-if="attribute.attribute.datatype == 'boolean'" type="checkbox" id="{{attribute.pk}}"
+                name="{{attribute.pk}}" ng-init="attribute.value = (attribute.value === 'True');" ng-model="attribute.value"
+                flex>
+              </md-checkbox>
+              <md-select ng-model="attribute.value" ng-if="attribute.attribute.datatype == 'enum'" multiple>
+                <md-optgroup>
+                  <md-option ng-value="option.pk" ng-repeat="option in attribute.enum">{{option.value}}</md-option>
+                </md-optgroup>
+              </md-select>
+            </md-input-container>
+          </li>
+        </ul>
+      </div>
+    </md-tab-body>
+  </md-tab>
+</div>

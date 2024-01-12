@@ -1,0 +1,75 @@
+<md-dialog aria-label="Salvavita" id="inputDialog">
+    <md-dialog-content>
+        <md-button class="md-icon-button" ng-click="cancel()">
+            <md-icon class="fa fa-times" aria-label="Close dialog"></md-icon>
+
+        </md-button>
+        &nbsp;
+        <i class="fa fa-trash" aria-hidden="true" ng-show="object.created_by.pk==profile.pk || object.user==profile.pk || object.user.pk==profile.pk"
+            ng-click="delete_elem(ev)" title="Elimina la sezione"></i>
+        <i class="fa fa-pencil-square" ng-show="object.created_by.pk==profile.pk || object.user==profile.pk || object.user.pk==profile.pk"
+            aria-hidden="true" ng-click="edit(ev)" title="Modifica la sezione"></i>
+        <!-- MODIFICHE -->
+        <div id="boxmod0">
+            <div class="overlay_outer">
+                <div class="overlay_inner">
+                    <div class="boxmod" ng-repeat="item_schema in schema.items track by $index">
+                        <span class="titlebold">{{item_schema.title}}:</span>
+                        <span ng-if="!item_schema.items && (item_schema.type==='textarea' || item_schema.type==='text' || item_schema.type.indexOf('date')>=0) ">{{object[item_schema.label]}}</span>
+                        <span ng-if="!item_schema.items && item_schema.label==='start_hour'">{{object['start_hour'] | date:"HH:mm"}}</span>
+                        <span ng-if="!item_schema.items && item_schema.label==='end_hour'">{{object['end_hour'] | date:"HH:mm"}}</span>
+                        <span ng-if="!item_schema.items && item_schema.type==='checkbox'">
+                            <span ng-if="object[item_schema.label]==true">SI</span>
+                        <span ng-if="object[item_schema.label]==false">NO</span>
+                        </span>
+                        <span ng-if="item_schema.type==='select'">
+                            {{object[item_schema.label]['name']}}
+                        </span>
+                        <span ng-if="item_schema.type==='custom_for_dossier'">
+                            <ul style="list-style: outside none none;">
+                                <li ng-repeat="item_custom in object[item_schema.label]" style="margin-top: 8px;">
+                                    <i class="fa fa-calendar-o" aria-hidden="true"></i>
+                                    <span style="margin-left: 10px;">({{item_custom['start_date'] | date:'dd/MM/yyyy'}}-{{item_custom['end_date'] | date:'dd/MM/yyyy'}}) {{item_custom['name']}}</span>
+                                </li>
+                            </ul>
+                        </span>
+                        <span ng-if="item_schema.type==='multiselect'">
+                            <span ng-repeat="subobj in object[item_schema.label]">
+                                <ul style="list-style: none;" ng-if="option.pk===subobj" ng-repeat="option in item_schema['options']">
+                                    <li >
+                                        <i ng-hide="schema.label==='terapia_schema'" class="fa fa-users" aria-hidden="true" style="padding-bottom: 0px; padding-left: 0px; padding-right: 0px;"></i>
+                                        <i ng-show="schema.label==='terapia_schema'" class="fa fa-clock-o" aria-hidden="true" style="padding-bottom: 0px; padding-left: 0px; padding-right: 0px;"></i>
+                                        {{option.name}}
+                                    </li> <br />
+                                </ul>
+                            </span>
+                        </span>
+                        <span ng-if="item_schema.type==='multiple_input'">
+                            <span ng-if="object.read_only">Lista utenti non visibile</span>
+                        <span ng-hide="object.read_only">
+                                <ul style="list-style: none;" ng-repeat="subobj in object[item_schema.label] track by $index" >
+                                    <li>
+                                    <i ng-hide="schema.label==='terapia_schema'" class="fa fa-users" aria-hidden="true" style="padding-bottom: 0px; padding-left: 0px; padding-right: 0px;"></i>
+                                    <i ng-show="schema.label==='terapia_schema'" class="fa fa-clock-o" aria-hidden="true" style="padding-bottom: 0px; padding-left: 0px; padding-right: 0px;"></i>
+                                    {{subobj[item_schema.items[0].label]}} - {{subobj[item_schema.items[1].label]}}</li> <br />
+                                </ul>
+                            </span>
+                        </span>
+                        <div ng-if="item_schema.type==='file'">
+                            <ul class="listfile">
+                                <li id="file_{{file.pk}}" ng-repeat="file in object[item_schema.label] track by $index">
+                                    <i class="fa fa-file-o" aria-hidden="true" style="padding-bottom: 0px; padding-left: 0px; padding-right: 0px;"></i>
+                                    <a ng-click="openFile(file.document)" no-href>{{file.name}}</a>
+                                    <i class="fa fa-times" 
+                                        ng-show="(object.created_by && object.created_by.pk==profile.pk) || (object.user && object.user.pk==profile.pk)|| (object.user && object.user==profile.pk)" 
+                                        aria-hidden="true" ng-click="deleteDocument($event, file.pk)"
+                                        style="margin-top:0 !important"></i>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </md-dialog-content>
+</md-dialog>

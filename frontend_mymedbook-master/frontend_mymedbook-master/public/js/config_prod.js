@@ -1,0 +1,12 @@
+var SERVER_URL = "/";
+var BASE_URL = SERVER_URL + "api/v1/";
+var URL_AUTH = SERVER_URL + "api/v1/";
+var URL_FRONTEND = "/";
+var IMG_DEFAULT = "images/default_avatar.png";
+var URL_IMAGE = SERVER_URL + "media/";
+var URL_FILES = SERVER_URL + "uploads/files/";
+var NUM_GG_EDIT_THERAPY = 2;
+var FILE_SIZE = 500;
+var MAX_MULTIPLE_INPUT = 3;
+var PAGE_LIMIT = 10;
+var CLIENT_ID = 'it.netfarm.mymedbook.web';

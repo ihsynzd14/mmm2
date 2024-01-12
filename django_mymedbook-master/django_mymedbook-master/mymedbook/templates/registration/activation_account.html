@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html lang="it">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+    {% load i18n %}{% autoescape off %}
+    <div id="content" class="{% block coltype %}colM{% endblock %}">
+        <p>
+            {% blocktrans %}You're receiving this email because you requested an activation for your user account at <a href="{{site_name}}">{{ site_name }}</a>.{% endblocktrans %}
+        </p>
+
+        <p>
+            {% trans "Please click to the following link to activate your account:" %}
+            {% block reset_link %}
+                <a href="{{ protocol }}://{{ domain }}{{ activate_account }}?user_id={{user.pk}}"> Activate your account here </a>
+            {% endblock %}
+        </p>
+
+    </div>
+    <br />
+    {% block footer %}
+        <div id="footer">
+           <p>{% trans "Thanks for using our site!" %}</p>
+           The <a href="{{site_name}}">{% blocktrans %} {{ site_name }} {% endblocktrans %}</a> team.
+        </div>
+    {% endblock %}
+    {% endautoescape %}
+</body>
+
+</html>

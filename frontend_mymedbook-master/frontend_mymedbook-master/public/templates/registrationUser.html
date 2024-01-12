@@ -1,0 +1,45 @@
+<form name="registerForm" layout="column" action="" layout-fill layout-padding layout-margin>
+    <md-input-container class="login">
+        <label>
+                        Nome
+                    </label>
+        <input class="removespace" type="text" ng-model="modelProfile['first_name']" aria-label="name" required />
+    </md-input-container>
+    <md-input-container class="login">
+        <label>
+                        Cognome
+                    </label>
+        <input class="removespace" type="text" ng-model="modelProfile['last_name']" name="email" aria-label="surname" required />
+    </md-input-container>
+    <md-input-container class="login">
+        <label>
+                        Email
+                    </label>
+        <input class="removespace" type="email" ng-model="modelProfile['email']'" aria-label="email" required ng-pattern="/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/"
+        />
+        <div ng-messages="registerForm.email.$error" role="alert">
+            <div ng-hide="!registerForm.email.$error.pattern" ng-message-exp="['required', 'pattern']">
+                Email non valida
+            </div>
+        </div>
+    </md-input-container>
+    <md-input-container class="login">
+        <label>
+                Password <span class="errorpwd">(composta da almeno 6 caratteri)</span>
+            </label>
+        <input class="removespace" type="password" ng-model="modelProfile['password']" name="password" minlength="6" aria-label="password" required
+        />
+        <div ng-messages="registerForm.password.$error" role="alert">
+            <div class="errorpwd1" ng-hide="!registerForm.password.$error.minlength" ng-hide="minlength" ng-message-exp="minlength">
+                La password deve essere composta da almeno 6 caratteri
+            </div>
+        </div>
+    </md-input-container>
+    <md-input-container class="login">
+        <label>
+                Ripeti Password <span class="errorpwd">(composta da almeno 6 caratteri)</span>
+            </label>
+        <input class="removespace" type="password" ng-model="modelProfile['password_check']" name="password_repeat" aria-label="password_repeat"
+            required />
+    </md-input-container>
+</form>

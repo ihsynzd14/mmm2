@@ -1,0 +1,170 @@
+<!--Lista dipendenti-->
+<div class="body-box members" ng-init="init(); tab = 'listautenti'" ng-show="tab=='listautenti'">
+    <div nlayout="column" class="md-inline-form">
+        <md-content md-theme="docs-dark md_content_members" layout-gt-sm="row" layout-padding>
+            <span class="spanclassing">Lista dipendenti della struttura scelta</span>
+            <div>
+                <!-- Table starts here -->
+                <table id="table" class="table table-hover table-mc-light-blue">
+                    <thead>
+                        <tr>
+                            <th>Nome dipendente</th>
+                            <th>Tag Struttura</th>
+                            <th>Ruolo</th>
+                            <th>Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="user in users">
+                            <td data-title="Nome dipendente">
+                                {{user.first_name}} {{user.last_name}}<br/>
+                                <span class="emailtable">{{user.email}}</span>
+                            </td>
+                            <td data-title="Tag Struttura" ng-if="struct_member.structure.pk==structure_id" ng-repeat="struct_member in user.structuremembership_set">
+                                <span ng-repeat="mymedtag in struct_member.mymedtag_set"><span ng-if="mymedtag.active==true" >{{mymedtag.code || '-'}}</span></span>
+                            </td>
+                            <td>{{listLabelGroups[user.groups[0].name].text}}</td>
+                            <td data-title="Azioni">
+                                <button class="btnlista" title="Registra uscita" ng-click="showConfirmOut(user)"><i class="fa fa-external-link" aria-hidden="true"></i></button>
+                                <button class="btnlista" title="Modifica tag struttura" ng-click="modalChangeMMT(user)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </md-content>
+        <ul class="pagination">
+            <li ng-click="loadPrevious()" ng-class="currentPage>=2 ? 'paginate_button previous' : 'paginate_button previous disabled'">
+                <a href="">«</a>
+            </li>
+            <li ng-repeat="p in range(1,total_page)" id="range_{{p}}" ng-class="currentPage==(p) ? 'paginate_button active': 'paginate_button'"
+                ng-click="gotoPage(p)"><a href="">{{p}}</a></li>
+            <li ng-click="loadNext()" ng-class="currentPage <= total_page-1 ? 'paginate_button next' : 'paginate_button next disabled'">
+                <a href="">»</a>
+            </li>
+        </ul>
+        <button class="btn1" title="Aggiungi nuovo ospite" ng-click="tab = 'adduser'"><i class="fa fa-plus" aria-hidden="true"></i>Aggiungi Nuovo</button>
+    </div>
+</div>
+
+<!--Ospite-->
+<div class="body-box" ng-show="tab == 'adduser'">
+    <div nlayout="column" class="md-inline-form">
+        <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding>
+            <span class="spanclassing">Dipendente</span>
+            <md-icon class="fa fa-chevron-circle-left" ng-click="tab = 'listautenti'; email=''" aria-hidden="true" title="Indietro"></md-icon>
+            <div>
+                <md-input-container>
+                    <label>Email</label>
+                    <input ng-model="email" type="email">
+                </md-input-container>
+            </div>
+        </md-content>
+    </div>
+    <button class="btn" title="verifica ospite" aria-label="verifica" ng-disabled="!email" ng-click="verifyGuest()">Verifica</button>
+</div>
+
+<div class="user-box" ng-show="tab=='registration' ">
+    <div class="header-box"> Nuova registrazione
+        <md-button aria-label="" style="cursor:default">
+            <md-icon class="fa fa-question-circle"></md-icon>
+            <md-tooltip md-direction="bottom">
+                <span>
+                    Qui puoi registrare un nuovo dipendente all'interno della struttura di riferimento.
+                </span>
+            </md-tooltip>
+        </md-button>
+        <md-icon class="fa fa-chevron-circle-left" ng-click="tab = 'listautenti'; email=''" aria-hidden="true" title="Indietro"></md-icon>
+    </div>
+    <div class="body-box ingressiinclude">
+        <form name="registerForm" layout="column" layout-fill layout-padding layout-margin>
+            <md-input-container class="login">
+                <label>
+                    Ruolo
+                </label>
+                <md-select ng-model="modelProfile['group']">
+                    <md-option ng-repeat="group in groups" ng-value="group.id" >{{group.text}}</md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container class="login">
+                <label>
+                    Nome
+                </label>
+                <input class="removespace" type="text" ng-model="modelProfile['first_name']" aria-label="name" required />
+            </md-input-container>
+            <md-input-container class="login">
+                <label>
+                    Cognome
+                </label>
+                <input class="removespace" type="text" ng-model="modelProfile['last_name']" name="email" aria-label="surname" required />
+            </md-input-container>
+            <md-input-container class="login">
+                <label>
+                    Email
+                </label>
+                <input class="removespace" type="email" ng-model="modelProfile['email']" aria-label="email" required ng-pattern="/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/"
+                />
+                <div ng-messages="registerForm.email.$error" role="alert">
+                    <div ng-hide="!registerForm.email.$error.pattern" ng-message-exp="['required', 'pattern']">
+                        Email non valida
+                    </div>
+                </div>
+            </md-input-container>
+            <md-input-container class="login">
+                <label>
+                Password <span class="errorpwd">(composta da almeno 6 caratteri)</span>
+            </label>
+                <input class="removespace" type="password" ng-model="modelProfile['password']" name="password" minlength="6" aria-label="password"
+                    required />
+                <div ng-messages="registerForm.password.$error" role="alert">
+                    <div class="errorpwd1" ng-hide="!registerForm.password.$error.minlength" ng-hide="minlength" ng-message-exp="minlength">
+                        La password deve essere composta da almeno 6 caratteri
+                    </div>
+                </div>
+            </md-input-container>
+            <md-input-container class="login">
+                <label>
+                    Ripeti Password <span class="errorpwd">(composta da almeno 6 caratteri)</span>
+                </label>
+                <input class="removespace" type="password" ng-model="modelProfile['password_check']" name="password_repeat" aria-label="password_repeat"
+                    required />
+            </md-input-container>
+        </form>
+        <div class="footer-box1">
+            <input class="btn" type="submit" id="submit" value="Registra" ng-click="saveMember()" />
+        </div>
+    </div>
+</div>
+
+<!--MODALE CAMBIO MYMEDTAG-->
+<div id="modal_change_tag" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+                <h4 class="modal-title">Cambia o aggiungi un nuovo mymedtag relativo alla struttura</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <md-input-container>
+                                        <label>MyMedTagCode</label>
+                                        <input ng-model="code" type="text">
+                                    </md-input-container>
+                                    <div class="footer-box1">
+                                        <input class="btn" type="submit" id="submit" value="Salva" ng-click="editMMTC(structuremembership, tag_id)" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

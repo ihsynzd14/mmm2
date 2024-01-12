@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#c0504e</color>
+    <color name="colorPrimaryDark">#0e388c</color>
+    <color name="colorAccent">#304ffe</color>
+    <color name="table_second">#e6a2a1</color>
+    <color name="table_first">#ffd1d1</color>
+    <color name="white">#ffffff</color>
+    <color name="accent_link">#b71c1c</color>
+    <color name="black">#000000</color>
+    <color name="gray">#f6f7f9</color>
+    <color name="gray_dark">#696969</color>
+    <color name="button_color">#66b72c</color>
+
+
+</resources>

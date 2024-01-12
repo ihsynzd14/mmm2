@@ -1,0 +1,7 @@
+*~
+.vscode
+.idea
+.sass-cache
+bower_components/
+node_modules/
+public/js/config.js

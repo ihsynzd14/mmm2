@@ -1,0 +1,99 @@
+<style>
+    #label_gruppi {
+        margin-top: 61px;
+        width: 150px;
+    }
+
+    #select_gruppi {
+        position: absolute;
+        width: 150px;
+    }
+</style>
+
+<div id="dashboard">
+    <div class="box post-container post-add">
+        <div class="post-header">
+            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Post
+        </div>
+        <div class="post-body">
+            <div class="post-author-image">
+                <img class="img-profile" />
+            </div>
+            <textarea id="post-textarea" placeholder="Scrivi qualcosa..." ng-model="message"></textarea>
+
+        </div>
+        <div class="post-footer">
+            <div>
+                <div class="sharewith">
+                    <label id="label_gruppi">Gruppi</label>
+                    <md-select id="select_gruppi" ng-model="groups" multiple required>
+                        <md-optgroup>
+                            <md-option ng-value="option.pk" ng-repeat="option in gruppi">{{option.name}}</md-option>
+                        </md-optgroup>
+                    </md-select>
+                </div>
+                <div class="sharewith" style="float: right; margin-top: -5%;">
+                    <label id="label_gruppi">File</label>
+                    <input class="inputfile" ngf-select="" ng-model="picFile" name="file" ngf-accept="'*'" type="file" style="margin-left: -3% !important;">
+                </div>
+            </div>
+            <button class="btnpost" ng-click="publicationPost(picFile)" style="margin: 8% auto;">Pubblica</button>
+        </div>
+    </div>
+    <div infinite-scroll-distance="0" infinite-scroll="" ng-init="init()">
+        <!-- ngRepeat: entry in dashboard.posts -->
+        <div ng-repeat="post in posts track by $index" class="ng-scope">
+            <post-details id="{{post.pk}}" class="ng-isolate-scope">
+                <div class="box post-container">
+                    <div class="post-header">
+                        <div class="post-author ng-binding">
+                            <div class="post-author-image"><img ng-src="" class="img-profile">
+                            </div>
+                            {{post.user.first_name}}{{post.user.last_name}}
+                            <!-- ngIf: postDetails.entry.shared -->
+                        </div>
+                        <div class="post-date ng-binding"> {{ post.created | date : "dd/MM/y"}} </div>
+                    </div>
+                    <div class="post-body ng-binding">
+                        <img style="box-shadow:1px 1px 2px gray;vertical-align:top"> {{post.text}}
+                        <!-- ngIf: postDetails.entry.shared -->
+                    </div>
+                    <div class="post-body ng-binding" ng-if="post.document_set.length>0">
+                        <a href="{{URL_IMAGE+post.document_set[0].document}}" target="_blank"> Allegato</a>
+                        <!-- ngIf: postDetails.entry.shared -->
+                    </div>
+
+                    <div class="post-footer1" style="padding-bottom: 20px;">
+                        <input style="border:1px solid lightslategray;" id="comment_{{$index}}" type="text" value=""></input>
+                        <button ng-click="addComment(post.pk, $index)" class="btnp">Rispondi</button>
+                        <!--<button class="btnp">Condividi</button>-->
+                        <!-- ngIf: postDetails.isOwner -->
+                        <button class="btnp ng-scope" ng-hide="profile.pk!=post.user.pk" ng-click="removePost(post.pk)">Cancella</button>
+                        <!-- end ngIf: postDetails.isOwner -->
+                        <!-- Immagine-->
+                        <div class="post-author-image"> <img ng-src="" class="img-profile"> </div>
+                        <!--<image-upload files="profile.user.profile.images"></image-upload> -->
+                        <!-- COMMENTI -->
+                        <div class="post-comments" ng-hide="post.read_only">
+                            <div class="box post-container" ng-repeat="comment in post.comment_set">
+                                <!-- Immagine -->
+                                <div class="post-author-image"> <img ng-src="" class="img-profile"></div>
+                                <div class="post-header">
+                                    <div class="post-author ng-binding"> {{comment.user.first_name}} {{comment.user.last_name}} </div>
+                                </div>
+                                <div class="post-body ng-binding"> {{comment.text}} </div>
+                                <div class="post-footer">
+                                    <div class="post-date ng-binding">
+                                        {{ comment.created | date : "dd/MM/yyyy HH:mma"}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </post-details>
+            </div>
+            <!-- end ngRepeat: entry in dashboard.posts -->
+        </div>
+        <button class="btnp" align="center" ng-show="count>posts.length" ng-click="incrementPage()" style="width: 50%; margin-left: 25%;">Altro</button>
+
+    </div>

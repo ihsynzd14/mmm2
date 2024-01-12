@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+
+<head>
+	<title>MyMedBook</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script src="../build/_bower.js?v=7"></script>
+	<!--css-->
+	<link rel="stylesheet" type="text/css" href="../build/_bower.css" />
+	<link rel="stylesheet" type="text/css" href="style.css?v=7" />
+
+	<!--config-->
+	<script src="../js/config.js?v=7"></script>
+	<!--app.js-->
+	<script src="../js/controller/app.js?v=7"></script>
+	<!--controller-->
+	<script src="../js/script.js?v=7"></script>
+	<script type="text/javascript" src="../js/controller/loginController.js?v=7"></script>
+	<!--fontawesome-->
+	<link rel="stylesheet" href="../font-awesome/css/font-awesome.min.css">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+	<!--fontawesome-->
+	<link rel="stylesheet" href="../font-awesome/css/font-awesome.min.css">
+</head>
+
+<body>
+	<header id="header" class="" role="menu">
+		<!-- LOGO -->
+		<div class="container">
+			<div id="textlogo"><img class="imglogo" hspace="10" src="logommb.png">
+				<span class="nomelogo">
+							MYMEDBook
+					</span>
+			</div>
+		</div>
+	</header>
+	<div class="col-xs-7">
+		<!-- LOGIN -->
+		<div class="loginuser" id="login">
+			<h3 class="md-display-1">
+				Attivazione Account
+			</h3>
+			<div style="text-align:center;padding-bottom:2em;">
+				Indirizzo email confermato ed account attivato.<br>
+				<br>
+				<a class="btn md-raised md-primary" href="/">
+					effettua il Login
+				</a>
+			</div>
+		</div>
+		<div align="center" class="message-error" style="margin-top: 5px;"></div>
+</body>
+<script type="text/javascript">
+	$(document).ready(function() {
+		//?uidb64=MTEx&token=4km-359514c23c32463c6088#/
+		var user_id = window.location.href.split("?user_id=");
+		$.ajax({
+			url:SERVER_URL+"users/activate_account/?user_id="+user_id[1]+"/",
+			type:"GET",
+			contentType:"application/json",
+			dataType:"json",
+			success: function(){
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				if(xhr.status==400)
+				{
+					console.log(xhr)
+					alert(xhr.responseJSON.detail);
+				}
+				if(xhr.status==500)
+				{
+					alert("Errore server");
+				}
+			}
+		});
+	});
+
+	</script>
+</html>

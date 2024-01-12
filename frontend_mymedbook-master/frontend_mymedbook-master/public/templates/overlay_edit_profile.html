@@ -1,0 +1,50 @@
+<md-dialog aria-label="CreaModifica" id="inputDialog">
+  <form ng-cloak>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Modifica{{schema.title}}</h2>
+        <!--tooltip-->
+        <md-button aria-label="" style="cursor:default">
+          <md-icon class="fa fa-question-circle"></md-icon>
+          <md-tooltip md-direction="bottom">
+            <span>Da qui puoi completare e/o modificare le tue informazioni personali.<br />
+                Una volta terminato, clicca su "Salva".
+            </span>
+          </md-tooltip>
+        </md-button>
+        <!--tooltip-->
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon class="fa fa-times" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <!---->
+        <div class="body-box1">
+          <div>
+            <div id="mod_containergeneral" class="w3-container tab_mod">
+              <form name="submit" id="form" action="javascript:;">
+                <div id="tabContainer" ng-cloak>
+                  <md-content id="editprofile" class="md-padding" style="overflow-y:auto">
+                    <md-tabs class="md-accent">
+                      <ng-include ng-if="path.indexOf('COC')<0" id="edit_profile" src="'templates/edit_profile.html'"></ng-include>
+                      <ng-include ng-if="path.indexOf('COC')<0" id="edit_attributes" src="'templates/edit_attributes.html'"></ng-include>
+                      <ng-include id="edit_COC" ng-if="path.indexOf('COC')<0" src="'teleassistenza/edit_COC.html'"></ng-include>
+                      <ng-include id="edit_COC" ng-if="path.indexOf('COC')>=0" src="'teleassistenza/edit_COCAffiliati.html'"></ng-include>
+                    </md-tabs>
+                  </md-content>
+                </div>
+                <div class="footer-box1">
+                  <input class="btn" type="submit" id="submit" value="Salva" ng-click="save()"/>
+                </div>
+              </form>
+            </div>
+          </div>
+
+        </div>
+    </md-dialog-content>
+  </form>
+</md-dialog>

@@ -1,0 +1,76 @@
+<style>
+    #select_container_3 {
+        z-index: 9999;
+    }
+</style>
+<!--Lista tag-->
+<div class="body-box" ng-init="init(); tab = 'listatag'" ng-show="tab=='listatag'">
+    <div nlayout="column" class="md-inline-form">
+        <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding>
+            <span class="spanclassing">Lista mymedtag</span>
+            <!-- Table starts here -->
+            <table id="table" class="table table-hover table-mc-light-blue">
+                <thead>
+                    <tr>
+                        <th>Codice</th>
+                        <th>Prodotto</th>
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-if="tag.active" ng-repeat="tag in tags">
+                        <td data-title="Nome dipendente">
+                            {{tag.code}}<br/>
+                        </td>
+                        <td data-title="Prodotto">{{tag.product_type.name || '-'}}</td>
+                        <td data-title="Azioni">
+                            <button class="btnlista" title="Disattiva" ng-click="showConfirmDeactive(tag, ev)"><i class="fa fa-external-link" aria-hidden="true"></i></button>
+                            <button class="btnlista" title="Modifica" ng-click="openModalAdd(tag)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="btn1" title="Aggiungi nuovo tag" ng-click="openModalAdd()"><i class="fa fa-plus" aria-hidden="true" ></i>Aggiungi Nuovo</button>
+        </md-content>
+    </div>
+</div>
+<!--MODALE CAMBIO MYMEDTAG-->
+<div id="modal_change_or_add_tag" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+                <h4 class="modal-title">Cambia o aggiungi un nuovo mymedtag relativo alla struttura</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <md-input-container>
+                                        <label>MyMedTagCode</label>
+                                        <input ng-model="tag.code" type="text" ng-required='true'>
+                                    </md-input-container>
+                                    <md-input-container>
+                                        <label>{{tag.product_type.name || 'Prodotti'}}</label>
+                                        <md-select ng-init="tag.product_type=[]" ng-model="tag.product_type" ng-required="true">
+                                            <md-optgroup>
+                                                <md-option ng-value="option" ng-repeat="option in products">{{option.name}}</md-option>
+                                            </md-optgroup>
+                                        </md-select>
+                                    </md-input-container>
+                                    <div class="footer-box1">
+                                        <input class="btn" type="submit" id="submit" value="Salva" ng-click="createTag()" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

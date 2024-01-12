@@ -1,0 +1,188 @@
+<div class="user-box" ng-init='init()'>
+    <div class="header-box"> Strutture
+        <md-button aria-label="" style="cursor:default">
+            <md-icon class="fa fa-question-circle"></md-icon>
+            <md-tooltip md-direction="bottom">
+                <span>
+                    Qui puoi verificare la lista delle strutture,
+                    la lista degli utenti affiliati alla singola
+                    struttura e se un utente non appare nella lista potrai registrarlo.
+                </span>
+            </md-tooltip>
+        </md-button>
+        <md-icon class="fa fa-chevron-circle-left" ng-hide="tab == 'elenco_strutture'" ng-click="header == 'initial'; tab = 'elenco_strutture'"
+            aria-hidden="true" title="Indietro"></md-icon>
+    </div>
+    <!--Elenco strutture-->
+    <div class="body-box">
+        <div nlayout="column" class="md-inline-form">
+            <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding>
+                <span class="spanclassing">Lista delle strutture</span>
+                <div>
+                    <table id="tablestrutture" class="table table-hover table-mc-light-blue">
+                        <thead>
+                            <tr>
+                                <th>Nome struttura</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="structuremembership in profile.structuremembership_set">
+                                <td ng-click="openUserList(structuremembership.structure.pk)">{{structuremembership.structure.name}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!--<ul class="ulclass">
+                        <li ng-click="openUserList(structuremembership.structure.pk)" ng-repeat="structuremembership in profile.structuremembership_set">{{structuremembership.structure.name}}</li>
+                    </ul>-->
+                </div>
+            </md-content>
+        </div>
+    </div>
+    <!--Lista affiliazione-->
+    <div class="body-box" ng-show="tab == 'listautenti'">
+        <div nlayout="column" class="md-inline-form">
+            <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding>
+                <span class="spanclassing">Lista utenti affiliati alla struttura scelta</span>
+                <div>
+                    <!--bottone allarme-->
+                        <button class="btnallarme" title="Vedi la lista degli allarmi" ng-click="alarmList()" ui-sref=".alarm"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                            Vedi Allarmi
+                        </button>
+                    <!-- Table starts here -->
+                    <table id="table" class="table table-hover table-mc-light-blue">
+                        <thead>
+                            <tr>
+                                <th>Nome ospite</th>
+                                <th>Mymedtag</th>
+                                <th>Tag Struttura</th>
+                                <th>Azioni</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="user in users">
+                                <td data-title="Nome ospite">
+                                    {{user.first_name}} {{user.last_name}}<br/>
+                                    <span class="emailtable">{{user.email}}</span>
+                                </td>
+                                <td data-title="Mymedtag">{{user.mymedtag_codeMMB || '-'}}</td>
+                                <td data-title="Tag Struttura">{{user.mymedtag_codeSTRUCT || '-'}}</td>
+                                <td data-title="Azioni">
+                                    <button class="btnlista" title="Registra uscita" ng-click="showConfirmOut(user.pk)"><i class="fa fa-external-link" aria-hidden="true"></i></button>
+                                    <button class="btnlista" title="Modifica" ng-click="editGuest(user)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </md-content>
+            <button class="btn1" title="Aggiungi nuovo ospite" ng-click="tab = 'adduser'"><i class="fa fa-plus" aria-hidden="true"></i>Aggiungi Nuovo</button>
+        </div>
+    </div>
+    <!--Lista ALLARMI-->
+    <div class="body-box" ng-show="tab == 'allarmi'">
+        <div nlayout="column" class="md-inline-form">
+            <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding>
+                <span class="spanclassing">Lista allarmi</span>
+                <div ng-show="lunghezza == 0 || lunghezza == []"><span class="noerror">Non ci sono allarmi</span></div>
+                <div>
+                    <!-- Table starts here -->
+                    <table ng-hide="lunghezza == 0" id="table" class="table table-hover table-mc-light-blue">
+                        <thead>
+                            <tr>
+                                <th>Allarme</th>
+                                <th>Zona</th>
+                                <th>Data</th>
+                                <th>Richiedente</th>
+                                <th>Evaso</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="alarm in alarms">
+                                <td data-title="Allarme">{{alarm.message}}</td>
+                                <td data-title="Zona">{{alarm.sensor.caption}}</td>
+                                <td data-title="Data">{{alarm.date | date:"MM/dd/yyyy h:mm:ss"}}</td>
+                                <td data-title="Richiedente">{{alarm.caller.first_name}} {{alarm.caller.last_name}}</td>
+                                <td data-tile="Evaso">
+                                    <!--<md-checkbox class="md-primary md-align-top-right" type="checkbox" flex ng-model="alarm.active">
+                                    </md-checkbox>ng-true-value-->
+                                    <md-switch class="md-primary" name="special" ng-change="onoffAlarm(alarm)" ng-model="alarm.active"></md-switch>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </md-content>
+        </div>
+    </div>
+    <!--Ospite-->
+    <div class="body-box" ng-show="tab == 'adduser'">
+        <div nlayout="column" class="md-inline-form">
+            <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding>
+                <span class="spanclassing">Ospite</span>
+                <div>
+                    <md-input-container>
+                        <label>Email</label>
+                        <input ng-model="email" type="email">
+                    </md-input-container>
+                </div>
+            </md-content>
+        </div>
+        <button class="btn" title="verifica ospite" ng-disabled="!email" ng-click="verifyGuest()">Verifica Utente</button>
+    </div>
+</div>
+
+<!--REGISTRAZIONE NUOVO UTENTE-->
+<div class="user-box" ng-show="header == 'registration'">
+    <div class="header-box"> Nuova registrazione
+        <md-button aria-label="" style="cursor:default">
+            <md-icon class="fa fa-question-circle"></md-icon>
+            <md-tooltip md-direction="bottom">
+                <span>
+                    Qui puoi registrare un nuovo ospite all'interno della struttura di riferimento.
+                </span>
+            </md-tooltip>
+        </md-button>
+        <md-icon class="fa fa-chevron-circle-left" ng-click="header = 'initial'; tab = 'elenco_strutture'" aria-hidden="true" title="Indietro"></md-icon>
+    </div>
+    <div class="body-box">
+        <ng-include src="'templates/registrationGuest.html'"></ng-include>
+    </div>
+</div>
+
+<!--MODIFICA UTENTE -->
+<div class="user-box" ng-show="header == 'edit'">
+    <div class="header-box"> Modifica dati Ospite
+        <md-button aria-label="" style="cursor:default">
+            <md-icon class="fa fa-question-circle"></md-icon>
+            <md-tooltip md-direction="bottom">
+                <span>
+                    Qui puoi modificare le informazioni di un ospite.
+                </span>
+            </md-tooltip>
+        </md-button>
+        <md-icon class="fa fa-chevron-circle-left" ng-click="header = 'initial'; tab = 'elenco_strutture'" aria-hidden="true" title="Indietro"></md-icon>
+    </div>
+    <div class="body-box" id="editingressi">
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <div class="body-box1">
+                    <div id="mod_containergeneral" class="w3-container tab_mod">
+                        <form name="submit" id="form" action="javascript:;">
+                            <div id="tabContainer" ng-cloak>
+                                <md-content id="editprofile" class="md-padding">
+                                    <md-tabs md-dynamic-height md-border-bottom class="md-accent" md-align-tabs="{{'top'}}" md-stretch-tabs="always" md-selected="0">
+                                        <ng-include src="'templates/edit_profile.html'"></ng-include>
+                                        <ng-include src="'templates/edit_attributes.html'"></ng-include>
+                                    </md-tabs>
+                                </md-content>
+                            </div>
+                            <div class="footer-box1">
+                                <input class="btn" type="submit" id="submit" value="Salva" ng-click="save()" ng-disabled="checkRegDisabled" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </md-dialog-content>
+    </div>
+</div>

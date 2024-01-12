@@ -1,0 +1,42 @@
+<div class="boxmmt-row boxmmt1" ng-show="mymedtag.lifesaver.attribute">
+  <span class="boxmmt-label" style="text-transform: capitalize">{{mymedtag.lifesaver.attribute.name}}: </span>
+  <span class="boxmmt-value" ng-if="mymedtag.lifesaver.value!='True' && mymedtag.lifesaver.value!='False'">{{mymedtag.lifesaver.value}}</span>
+  <span class="boxmmt-value" ng-if="mymedtag.lifesaver.value==='True'">SI</span>
+      <span class="boxmmt-value" ng-if="mymedtag.lifesaver.value==='False'">NO</span>
+</div>
+<!-- <div ng-hide="mymedtag.lifesaver.attribute">
+  <span>Non è presente il campo principale assegnato al salvavita</span>
+</div> -->
+<span>
+  <div ng-repeat="field_data in mymedtag.attributes_groups track by $index">
+    <div ng-if="field_data.attribute.datatype!='enum'" class="boxmmt-row boxmmt2">
+      <span class="boxmmt-label" style="text-transform: capitalize" ng-show="field_data.attribute.name.indexOf('---')<0">{{field_data.attribute.name}}:</span>
+      <span class="boxmmt-value" ng-if="field_data.attribute.datatype!=='year_with_text' && field_data.attribute.datatype!=='year_with_checkbox' && field_data.value==='True'">SI</span>
+      <span class="boxmmt-value" ng-if="field_data.attribute.datatype!=='year_with_text' && field_data.attribute.datatype!=='year_with_checkbox' && field_data.value==='False'">NO</span>
+      <span class="boxmmt-value" ng-if="field_data.attribute.datatype!=='year_with_text' && field_data.attribute.datatype!=='year_with_checkbox' && field_data.value!='True' && field_data.value!='False'">{{field_data.value}}</span>
+      <span class="boxmmt-value" ng-if="field_data.attribute.datatype=='year_with_checkbox'">dal {{field_data.value}}</span>
+      <span class="boxmmt-value" ng-if="field_data.attribute.datatype=='year_with_text'"> {{field_data.other}} : dal {{field_data.value}}</span>
+    </div>
+</div>
+<div ng-if="field" ng-repeat="field in lista track by $index">
+  <div class="boxmmt-row boxmmt3">
+    <span class="boxmmt-label" style="text-transform: capitalize">{{field.name}}:</span>
+    <span class="boxmmt-value">{{field.value}}</span>
+  </div>
+</div>
+<div ng-if="mymedtag.therapies" class="boxmmt-row boxmmt-child boxmmt3">
+  <span class="boxmmt-label">Terapie:</span>
+  <br />
+  <br />
+  <ul ng-repeat="therapy in mymedtag.therapies">
+    <li class="boxmmt-value" ng-if="therapy.file!=''">
+      <i class="fa fa-file-o" aria-hidden="true"></i>
+      <a ng-click="openFile(therapy.file)" no-href> Terapia_{{therapy.modified | date:'yyyy-MM-dd HH:mm:ss'}} </a>
+    </li>
+    <li class="boxmmt-value" ng-if="therapy.info!=''">
+      <span>Terapia_{{therapy.modified | date:'yyyy-MM-dd HH:mm:ss'}} Farmaco: {{therapy.info}}</span>
+    </li>
+  </ul>
+</div>
+
+

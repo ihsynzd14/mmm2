@@ -1,0 +1,62 @@
+@charset "UTF-8";
+/* CSS Document */
+
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    border-radius: $radius;
+}
+
+@mixin border-radius-separate($tl, $tr, $br, $bl) {
+    -webkit-border-radius: $tl $tr $br $bl;
+    -moz-border-radius: $tl $tr $br $bl;
+    border-radius: $tl $tr $br $bl;
+}
+
+@mixin box-shadow($hshadow, $vshadow, $blur, $spread, $color) {
+    -webkit-box-shadow: $hshadow $vshadow $blur $spread $color;
+    -moz-box-shadow: $hshadow $vshadow $blur $spread $color;
+    box-shadow: $hshadow $vshadow $blur $spread $color;
+}
+
+@mixin linear-gradient($start, $end) {
+    background-color: $start !important;
+    background: -webkit-gradient(linear, left top, left bottom, from($start), to($end)) !important;
+    background: -webkit-linear-gradient(top, $start, $end) !important;
+    background: -moz-linear-gradient(center top , $start, $end) !important;
+    background: -ms-linear-gradient(top, $start, $end) !important;
+    background: -o-linear-gradient(top, $start, $end) !important;
+    background: linear-gradient(top, $start, $end) !important;
+}
+
+@mixin diagonal-gradient($start, $end) {
+    background-color: $start !important;
+    background: -webkit-linear-gradient(right top, $start , $end) !important; /* For Safari */
+    background: -o-linear-gradient(bottom left, $start, $end) !important; /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(bottom left, $start, $end) !important; /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to bottom left, $start , $end) !important; /* Standard syntax */
+}
+
+@mixin triple-gradient($start, $middle, $end) {
+    background-color: $start !important;
+    background-image:-moz-linear-gradient(top, $start 0%, $middle 45%, $middle 55%, $end 100%) !important;
+    background-image:-webkit-linear-gradient(top, $start 0%, $middle 45%, $middle 55%,$end 100%) !important;
+    background-image:-o-linear-gradient(top, $start 0%, $middle 45%, $middle 55%, $end 100%) !important;
+    background-image:-ms-linear-gradient(top, $start 0%, $middle 45%, $middle 55%,$end 100%) !important;
+    background-image:-webkit-gradient(linear, right top, right bottom, color-stop(0%,$start), color-stop(50%,$middle),color-stop(100%,$end)) !important;
+    background-image:linear-gradient(top, $start 0%, $middle 45%, $middle 55%,$end 100%) !important;
+}
+
+@mixin linear-gradient-triple($start, $middle, $end) {
+    background-color: $end !important;
+    background: -webkit-gradient(linear, left top, left bottom, from($start), to($end)) !important;
+    background: -webkit-linear-gradient(top, $start, $middle, $end) !important;
+    background: -moz-linear-gradient(center top, $start, $middle, $end) !important;
+    background: -ms-linear-gradient(top, $start, $middle, $end) !important;
+    background: -o-linear-gradient(top, $start, $middle, $end) !important;
+    background: linear-gradient(top, $start, $middle, $end) !important;
+}
+
+/*    filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=$start,EndColorStr=$end) !important;*/
+/*	-ms-filter: "progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=$start,EndColorStr=$end)";*/
+

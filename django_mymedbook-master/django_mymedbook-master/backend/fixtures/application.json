@@ -1,0 +1,42 @@
+[
+  {
+    "model": "oauth2_provider.application",
+    "pk": 1,
+    "fields": {
+      "client_id": "it.netfarm.mymedbook.mymedtag",
+      "user": null,
+      "redirect_uris": "",
+      "client_type": "public",
+      "authorization_grant_type": "password",
+      "client_secret": "",
+      "name": "mymedtagandroid",
+      "skip_authorization": false
+    }
+  },{
+    "model": "oauth2_provider.application",
+    "pk": 1,
+    "fields": {
+      "client_id": "it.netfarm.mymedbook.mymedtag.cdv",
+      "user": null,
+      "redirect_uris": "",
+      "client_type": "public",
+      "authorization_grant_type": "password",
+      "client_secret": "",
+      "name": "mymedtagandroidcdv",
+      "skip_authorization": false
+    }
+  },{
+    "model": "oauth2_provider.application",
+    "pk": 1,
+    "fields": {
+      "client_id": "it.netfarm.mymedbook.web",
+      "user": null,
+      "redirect_uris": "",
+      "client_type": "public",
+      "authorization_grant_type": "password",
+      "client_secret": "",
+      "name": "mymedbookweb",
+      "skip_authorization": false
+    }
+  }
+]

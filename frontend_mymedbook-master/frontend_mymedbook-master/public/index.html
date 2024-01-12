@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html lang="it" ng-app="myMedBookApp">
+ 
+<head>
+    <title>MyMedBook</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <script src="build/_bower.js"></script>
+    <!--fontawesome-->
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <!--css-->
+    <link rel="stylesheet" type="text/css" href="build/_bower.css" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/angucomplete.css?v=7" />
+    <link rel="stylesheet" type="text/css" href="css/datetime-picker.css?v=7" />
+    <link rel="stylesheet" type="text/css" href="css/style.css?v=7" />
+    <script src="js/librerie/angular-oauth2.js"></script>
+    <script src="js/librerie/interact.js"></script>
+    <script src="js/librerie/angular-ui-calendar.js"></script>
+    <script src="http://code.angularjs.org/1.0.8/i18n/angular-locale_it-it.js"></script>
+    <script src="js/librerie/angucomplete.js"></script>
+    <script src="js/librerie/datetimepicker.js"></script>
+    <!-- <script src="js/librerie/datetimepicker.templates.js"></script> -->
+    <!--config-->
+    <script src="js/config.js?v=7"></script>
+    <!--app.js-->
+    <script src="js/controller/app.js?v=7"></script>
+    <!--controller-->
+    <script src="js/script.js?v=7"></script>
+    <script type="text/javascript" src="js/controller/loginController.js?v=7"></script>
+    <script type="text/javascript" src="js/controller/adminController.js?v=7"></script>
+    <script type="text/javascript" src="js/controller/changePasswordController.js?v=7"></script>
+    <script type="text/javascript" src="js/controller/mymedtagController.js?v=7"></script>
+    <script type="text/javascript" src="js/controller/generalController.js?v=7"></script>
+    <script type="text/javascript" src="js/controller/agendaController.js?v=7"></script>
+    <script type="text/javascript" src="js/controller/menuController.js?v=7"></script>
+    <script type="text/javascript" src="js/controller/chatController.js?v=7"></script>
+    <script type="text/javascript" src="js/controller/bachecaController.js?v=7"></script>
+    <script type="text/javascript" src="js/controller/dossierController.js?v=7"></script>
+    <script type="text/javascript" src="js/controller/gruppiController.js?v=7"></script>
+    <script type="text/javascript" src="js/controller/profiloController.js?v=7"></script>
+    <script type="text/javascript" src="js/controller/terapiaController.js?v=7"></script>
+    <script type="text/javascript" src="js/controller/privacyController.js?v=7"></script>
+    <script type="text/javascript" src="js/controller/registrationController.js?v=7"></script>
+    <script type="text/javascript" src="js/controller/ingressiController.js?v=7"></script>
+    <script type="text/javascript" src="js/controller/gestioneOspitiController.js?v=7"></script>
+    <script type="text/javascript" src="js/controller/gestioneDipendentiController.js?v=7"></script>
+    <script type="text/javascript" src="js/controller/gestioneAllarmiController.js?v=7"></script>
+
+    <!--teleassistenza-->
+    <script type="text/javascript" src="teleassistenza/COCController.js?v=7"></script>
+    <script type="text/javascript" src="teleassistenza/registrationAffiliationCOCController.js?v=7"></script>
+    <script type="text/javascript" src="teleassistenza/gestioneAffiliatiCOCController.js?v=7"></script>
+    <script type="text/javascript" src="teleassistenza/gestioneMembriCOCController.js?v=7"></script>
+    <script type="text/javascript" src="teleassistenza/gestioneRichiesteCOCController.js?v=7"></script>
+    <script type="text/javascript" src="teleassistenza/serialsCOCController.js?v=7"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("button").click(function () {
+                $(".menumobile").toggle();
+            });
+            $(".menumobile li").click(function () {
+                $(".menumobile").hide();
+            });
+        });
+    </script>
+
+</head>
+
+<body ng-controller="generalController">
+    <div class="container-fluid" ng-init="init()">
+        <!-- header -->
+        <header id="header" class="" role="menu" ng-show="path != '/allarmi'">
+            <!-- Menù mobile -->
+            <div class="mobile mobile_MMB">
+                <button class="navbarmobile"><i class="fa fa-bars" aria-hidden="true"></i></button>
+                <ul class="menumobile">
+                    <li><a href="#/profilo" alt="Visita il tuo profilo!" title="Visita il tuo profilo!">Profilo</a></li>
+                    <li><a href="#/privacy">Imposta Privacy</a></li>
+                    <li><a href="#/mymedtag" alt="Visualizza i tuoi mymedtag" title="Visualizza i tuoi mymedtag">MyMedTag</a></li>
+                    <li><a href="#/change_password" alt="Cambia la password!" title="Cambia la password!">Cambia Password</a></li>
+                    <li><a href="#/bacheca">Bacheca</a></li>
+                    <li><a href="#/dossier">Dossier Medico</a></li>
+                    <li><a href="#/agenda">Agenda e Promemoria</a></li>
+                    <li><a href="#/gruppi">Gruppi</a></li>
+                    <li><a href="#/terapia">Terapia</a></li>
+                    <li ng-show="profile.structuremembership_set.length>0"><a href="#/ingressi">Struttura</a></li>
+                </ul>
+            </div>
+            <div class="mobile mobile_CDV">
+                <button class="navbarmobile"><i class="fa fa-bars" aria-hidden="true"></i></button>
+                <ul class="menumobile">
+                    <li><a class="mmb_menu mmb_ospiti mmb_selected" href="#/ospiti">Gestione Ospiti</a></li>
+                    <li><a class="mmb_menu mmb_dipendenti" href="#/dipendenti">Gestione Dipendenti</a></li>
+                    <li ng-click="openAlarm()"><a no-href>Gestione Allarmi</a></li>
+                </ul>
+            </div>
+            <!-- LOGO -->
+            <div class="container">
+                <div id="textlogo"><img class="imglogo" hspace="10" src="images/logommb.png">
+                    <span class="nomelogo">
+                        MyMedBook
+                    </span>
+                </div>
+            </div>
+            <!--Icone user-->
+            <div layout="row" class="user">
+
+                <a id="logout" no-href ng-click="logout()">
+                    <i class="fa fa-sign-out" aria-hidden="true" alt="Esci" title="Esci"></i>
+                </a>
+                <!--<a no-href ng-click="change_password()">
+                    <i class="fa fa-sign-in" aria-hidden="true" alt="Change Password" title="Change Password"></i>
+                </a>-->
+                <a id="chat" href="#/chat" ng-click="loadChat()">
+                    <i class="fa fa-envelope" aria-hidden="true" alt="Messaggi" ng-if="notifications['message']['count']>0" style="color: red;"></i>
+                    <i class="fa fa-envelope" aria-hidden="true" alt="Messaggi" ng-if="!notifications || !notifications['message'] || notifications['message']['count']<=0"  style="color: white;"></i>
+                    <md-tooltip md-direction="bottom">
+                        <span>
+                            Invia un nuovo messaggio
+                        </span>
+                    </md-tooltip>
+                </a>
+                <!--<a no-href>
+                    <i class="fa fa-bell" aria-hidden="true" alt="Notifiche"></i>
+                    <md-tooltip md-direction="bottom">
+                        <span>
+                            Sezione in lavorazione
+                        </span>
+                    </md-tooltip>
+                </a>-->
+                <div id="profile_header" class="ng-binding info_header">
+                    <a href="#/profilo" class="benvenuto" alt="Visita il tuo profilo!" title="Visita il tuo profilo!">
+                        <span class="welcome">Benvenuto {{profile.first_name || "-" }} {{profile.last_name}}</span> <i class="fa fa-user" aria-hidden="true"></i>
+                    </a>
+                    <span class="benvenutoAdmin">
+                        <span class="welcome">Benvenuto {{profile.first_name || "-" }} {{profile.last_name}}</span>                    <i class="fa fa-user" aria-hidden="true"></i>
+                    </span>
+                    <!--                    <a no-href ng-click="openPdfManual()" style="text-decoration: none; margin-left: 9px; margin-right: -7px;">
+                    <i class="fa fa-book" aria-hidden="true" alt="Scarica il manuale" title="Scarica il manuale" ></i>-->
+                    </a>
+                    <md-button aria-label="" style="cursor:default">
+                        <md-icon class="fa fa-question-circle" id="changecolor"></md-icon>
+                        <md-tooltip md-direction="bottom">
+                            <span>
+                                Qui puoi:<br/>
+                                1. scambiare messaggi con gli utenti iscritti;<br/>
+                                2. visualizzare ed aggiornare il tuo profilo.
+                            </span>
+                        </md-tooltip>
+                    </md-button>
+                </div>
+            </div>
+        </header>
+        <div class="main-content-view row" ui-view="main-container"></div>
+    </div>
+    <footer class="footer" style=" background-color: rgb(14, 56, 140); overflow:hidden; margin-top: 5%;">
+        <div class="col-md-4" style="padding-top: 22px; padding-bottom: 22px; padding-left: 22px; color: white;">
+            <h4 style="text-decoration: underline; font-weight:bold">Contatti</h4>
+            <i class="fa fa-envelope-o" aria-hidden="true" style="padding-right: 5px;"></i> Mail: <a href="mailto:support@mymedbook.it">support@mymedbook.it</a><br
+            />
+            <i class="fa fa-whatsapp" aria-hidden="true" style="padding-right: 5px;"></i> Whatsapp: +39 391 760 8754<br />
+        </div>
+        <div class="col-md-4" style="padding-top: 22px; padding-bottom: 22px; padding-left: 22px; color: white;">
+            <h4 style="text-decoration: underline;  font-weight:bold">Documenti</h4>
+            <i class="fa fa-book" aria-hidden="true" alt="Scarica la lista degli smartphone compatibili" title="Scarica la lista degli smartphone compatibili"></i>
+            <a no-href ng-click="openPdfManual()" style="color: white;">
+                Manuale utente
+            </a><br />
+            <i class="fa fa-book" aria-hidden="true" alt="Scarica la lista degli smartphone compatibili" title="Scarica la lista degli smartphone compatibili"></i>
+            <a no-href ng-click="openPdfSmartphoneCompatibility()" style="color: white;">
+                Elenco smartphone con lettori NFC
+            </a><br />
+        </div>
+        <div class="col-md-4" style="padding-top: 22px; color: white; float:right; padding-left: 17%;">
+            <span>&copy; 2017 MyMedBook</span> | <a no-href ng-click="openDialogPrivacy()" style="color: white;">Privacy Policy</a><br
+            />
+        </div>
+    </footer>
+    <!--Container Fluid -->
+    <!--<footer class="footer" style="margin-top: 3px; height: 20vh; background-color: rgb(14, 56, 140);">
+        <div class="col-md-6" style="padding-top: 22px; padding-left: 22px; color: white;">
+            <i class="fa fa-envelope-o" aria-hidden="true" style="padding-right: 5px;"></i>
+             Mail: <a href="mailto:support@mymedbook.it">support@mymedbook.it</a><br />
+            <i class="fa fa-whatsapp" aria-hidden="true" style="padding-right: 5px;"></i> Whatsapp: +39 391 760 8754<br />
+            <i class="fa fa-book" aria-hidden="true" alt="Scarica la lista degli smartphone compatibili" title="Scarica la lista degli smartphone compatibili"></i>
+            <a no-href ng-click="openPdfManual()" style="color: white;">
+                Manuale utente
+            </a><br />
+            <i class="fa fa-book" aria-hidden="true" alt="Scarica la lista degli smartphone compatibili" title="Scarica la lista degli smartphone compatibili"></i>
+            <a no-href ng-click="openPdfSmartphoneCompatibility()" style="color: white;">
+                Elenco smartphone con lettori NFC
+            </a><br />
+        </div>
+        <div class="col-md-6" style="padding-top: 22px;  color: white; float:right;">
+            <span>&copy; 2017 MyMedBook</span> | <a no-href ng-click="openDialogPrivacy()" style="color: white;">Privacy Policy</a><br />
+        </div>
+    </footer>-->
+
+</body>
+
+
+</html>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/fab_help"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:paddingBottom="8dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            app:layout_constraintHeight_default="wrap">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/imageView"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:placeholderImage="@color/gray_dark"
+                app:placeholderImageScaleType="fitCenter"
+                app:roundAsCircle="true" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@+id/imageView"
+                android:layout_toStartOf="@+id/button"
+                android:ellipsize="end"
+                android:text="@string/punti_sospensione"
+                android:textColor="@color/black"
+                app:layout_constraintLeft_toRightOf="@+id/imageView"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button"
+                tools:text="Nome" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textView"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@+id/imageView"
+                android:layout_toStartOf="@+id/button"
+                android:ellipsize="end"
+                android:text="@string/punti_sospensione"
+                android:textColor="@color/black"
+                app:layout_constraintHorizontal_bias="0.628"
+                app:layout_constraintLeft_toRightOf="@+id/imageView"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView"
+                tools:text="Cognome" />
+
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/button_color"
+                android:minHeight="20dp"
+                android:padding="8dp"
+                android:text="@string/logout"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:visibility="gone"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:drawableLeft="@drawable/ic_exit_to_app"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/date_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/imageView"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@id/imageView"
+                android:textColor="@color/black"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/info_image"
+                app:layout_constraintTop_toTopOf="@+id/info_image"
+                tools:text="Data di nascita" />
+
+            <TextView
+                android:id="@+id/dossier"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="@string/dossier"
+                android:textColor="@color/accent_link"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/info_image"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/date_text" />
+
+            <ImageView
+                android:id="@+id/info_image"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                android:padding="4dp"
+                android:tint="@color/colorPrimaryDark"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView"
+                app:srcCompat="@drawable/ic_info_outline_black_24dp" />
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+
+    <Button
+        android:id="@+id/fab_help"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_margin="8dp"
+        android:background="@color/accent_link"
+        android:text="@string/fast_help"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</android.support.constraint.ConstraintLayout>
+

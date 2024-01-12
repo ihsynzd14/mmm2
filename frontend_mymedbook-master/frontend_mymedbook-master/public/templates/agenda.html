@@ -1,0 +1,33 @@
+<div class="user-box" ng-init="init()">
+    <div>
+        <div class="header-box"> Agenda e Promemoria
+            <md-button aria-label="" style="cursor:default">
+                <md-icon class="fa fa-question-circle"></md-icon>
+                <md-tooltip md-direction="bottom">
+                    <span>
+                        Puoi inserire un impegno passato, come ad esempio un ricovero, al quale associare la relativa
+                        documentazione storica,<br/> oppure puoi creare un impegno futuro, come ad esempio una visita medica,
+                        alla quale associare referti o altri documenti provenienti dal tuo dossier medico.<br>
+                    </span>
+                </md-tooltip>
+            </md-button>
+
+            <!-- mobile -->
+            <!--<div class="legendmobile">
+                <span ng-repeat="tipologia in tipologie_eventi"><span class="ev_{{tipologia.symbol}}">{{tipologia.symbol}}</span> - {{tipologia.name}};</span>
+            </div>-->
+            <div>
+                <i class="fa fa-wpforms" aria-hidden="true" alt="legenda" title="Legenda Agenda e promemoria"></i>
+                <div ng-repeat="tipologia in tipologie_eventi" title="{{tipologia.name}}" class="e{{tipologia.symbol}} md-fab md-raised md-mini">
+                    <span class="legenda">{{tipologia.symbol}}</span>-{{tipologia.name}}
+                </div>
+            </div>
+        </div>
+        <div class="body-box">
+            <div ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources"></div>
+        </div>
+        <div class="footer-box">
+            <button class="btn" title="crea un nuovo evento" ng-click="addEvent()">Crea un nuovo impegno</button>
+        </div>
+    </div>
+</div>

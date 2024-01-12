@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context="it.netfarm.mymedbook.mymedtag.start.SignupActivity">
+
+        <TextView
+            android:id="@+id/signup_here"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text="@string/signup_here"
+            android:textAllCaps="true"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/name_input"
+            style="@style/input_signup_style"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/signup_here">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/name_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/nome"
+                android:inputType="textPersonName" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/surname_input"
+            style="@style/input_signup_style"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/name_input">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/surname_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/cognome"
+                android:inputType="textPersonName" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/email_input"
+            style="@style/input_signup_style"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/surname_input">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/email_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/password_input"
+            style="@style/input_signup_style"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/email_input">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/password_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password_"
+                android:inputType="textPassword" />
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/password_repeat_input"
+            style="@style/input_signup_style"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password_input">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/password_repeat_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/repeat_password"
+                android:inputType="textPassword" />
+        </android.support.design.widget.TextInputLayout>
+
+        <CheckBox
+            android:id="@+id/check_profilation"
+            style="@style/check_signup_style"
+            android:layout_marginTop="32dp"
+            android:text="@string/accept_cookie"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password_repeat_input" />
+
+
+        <CheckBox
+            android:id="@+id/check_geo"
+            style="@style/check_signup_style"
+            android:text="@string/accept_geo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/check_profilation" />
+
+        <CheckBox
+            android:id="@+id/check_share"
+            style="@style/check_signup_style"
+            android:text="@string/accept_share_data"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/check_geo" />
+
+        <TextView
+            android:id="@+id/privacy_text_conditions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:text="@string/privacy_conditions"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/check_share" />
+
+        <Button
+            android:id="@+id/button_signup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="32dp"
+            android:background="@color/button_color"
+            android:text="@string/registrati"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/privacy_text_conditions" />
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

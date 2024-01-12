@@ -1,0 +1,33 @@
+<md-dialog aria-label="CreaModifica" id="inputDialog" class="DetailUser">
+    <form ng-cloak>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Dettagli Utente</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon class="fa fa-times" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content id="profilo" class="md-padding">
+            <md-tabs md-dynamic-height md-border-bottom class="md-accent" md-align-tabs="{{'top'}}" md-stretch-tabs="always" md-selected="0">
+                <md-tab id="tab_{{profilo.title}}" ng-repeat="profilo in profilo_schema[0].items">
+                    <md-tab-label>{{profilo.title}}</md-tab-label>
+                    <md-tab-body>
+                        <div id="{{profilo.id}}">
+                            <ul class="generalinfo-profile">
+                                <li ng-repeat="item in profilo.items">
+                                    <div class="titlebold">{{item.title}}</div>:
+                                    <span ng-if="profilo_utente.info.profilo[profilo.id][item.id]!==true &&
+                                        profilo_utente.info.profilo[profilo.id][item.id]!==false">{{profilo_utente.info.profilo[profilo.id][item.id] || '-'}}</span>
+                                        <span ng-if="profilo_utente.info.profilo[profilo.id][item.id]==false">NO</span>
+                                        <span ng-if="profilo_utente.info.profilo[profilo.id][item.id]==true">SI</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </md-tab-body>
+                </md-tab>
+            </md-tabs>
+        </md-dialog-content>
+    </form>
+</md-dialog>

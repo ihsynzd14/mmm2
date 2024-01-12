@@ -1,0 +1,11 @@
+{% load i18n %}{% autoescape off %}
+{% blocktrans %}Hai ricevuto una richiesta di assistenza da parte di {{ user }}.{% endblocktrans %}
+
+{% trans "Per favore clicca di seguito per vedere di dove si trova:" %}
+{% block reset_link %}
+{{ protocol }}://{{ site }}
+{% endblock %}
+
+{% blocktrans %}The {{ site_name }} team{% endblocktrans %}
+
+{% endautoescape %}

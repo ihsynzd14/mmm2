@@ -1,0 +1,60 @@
+<style>
+    #chat, #profile_header, .menu_init, .container .menu-laterale, .container .menu .menu_utenti,
+    .fa-envelope, .fa-bell, .fa-question-circle, .benvenuto{
+        display: none !important
+    }
+    .benvenutoAdmin, #logout {
+        display:block !important
+    }
+</style>
+<div class="container_table_users col-xs-12" ng-controller="adminController" ng-init="initAdmin()" style="display:none">
+    <div class="form-group container-search_guest">
+        <input type="text" class="form-control search_guest" placeholder="Search" ng-model="text_user" ng-change="searchUser()"
+        style="float: right; width: 24%; margin: 2% 10% 22px -33%;">
+    </div>
+    <table class="table" style="margin-top: -7px;">
+        <thead>
+            <tr>
+                <th style="width: 15%">Nome</th>
+                <th style="width: 15%">Cognome</th>
+                <th style="width: 15%">Email</th>
+                <th style="width: 15%">Active</th>
+                <th style="width: 15%">Data registrazione</th>
+                <th style="width: 15%">Dettagli</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="tab_{{user.pk}}" ng-repeat="user in users track by $index" ng-if="!user.admin">
+                <td>
+                    {{user.first_name}}
+                </td>
+                <td>
+                    {{user.last_name}}
+                </td>
+                <td>
+                    {{user.email}}
+                </td>
+                <td>
+                    <span ng-if="user.active">SI</span>
+                    <span ng-if="!user.active">NO</span>
+                </td>
+                <td>
+                    {{user.created | date:"dd/MM/yyyy HH:mm"}}
+                </td>
+                <td>
+                    <i class="fa fa-file-o" aria-hidden="true" ng-click="openDetailUser(user.pk,$event)"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <ul class="pagination">
+        <li ng-click="loadPrevious()" ng-class="currentPage>=2 ? 'paginate_button previous' : 'paginate_button previous disabled'">
+            <a href="">«</a>
+        </li>
+        <li ng-repeat="p in range(1,total_page)" id="range_{{p}}" ng-class="currentPage==(p) ? 'paginate_button active': 'paginate_button'" ng-click="gotoPage(p)"><a href="">{{p}}</a></li>
+        <li ng-click="loadNext()" ng-class="currentPage <= total_page-1 ? 'paginate_button next' : 'paginate_button next disabled'">
+            <a href="">»</a>
+        </li>
+    </ul>
+    <span style="margin-top: 0px; float: right; margin-right: 11px;">({{users.length}} utenti)</span>
+</div>

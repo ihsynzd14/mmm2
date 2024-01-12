@@ -1,0 +1,89 @@
+<style>
+    .md-button.md-icon-button {
+        float: none;
+    }
+
+    .md-datepicker-calendar-pane {
+        z-index: 66666;
+    }
+</style>
+<div class="user-box allarmi">
+    <!--Lista ALLARMI-->
+    <div class="body-box">
+        <div style="display:none">
+            <audio id="audio1" style="width:25%" controls>Canvas not supported</audio>
+        </div>
+        <div nlayout="column" class="md-inline-form">
+            <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding>
+                <span class="spanclassing">Lista allarmi</span>
+                <div ng-show="alarms.lenght == 0"><span class="noerror">Non ci sono allarmi</span></div>
+                <button class="btn1" style="float: right;" title="Storico Allarmi" ng-click="openOverlayAllarmi()">
+                        <i class="fa fa-download" aria-hidden="true"></i>
+                    </button>
+                <div class="table_allarmi">
+                    <input type="text" id="audioFile" value="sound/allarme.mp3" size="60" style="display:none" />
+                    <button id="playbutton" ng-click="togglePlay();" style="display:none">Play</button>
+                    <button class="btnallarme" ng-show="flag_handled==true" ng-click="getAlarms(false)" style="padding-right: 10px; margin-right: 13px;">Vedi da gestire</button>
+                    <button class="btnallarme" ng-hide="flag_handled==true" ng-click="getAlarms(true)" style="padding-right: 10px; margin-right: 13px;">Vedi tutti</button>
+                    <!-- Table starts here -->
+                    <table ng-show="alarms.lenght != 0" id="table" class="table table-hover table-mc-light-blue">
+                        <thead>
+                            <tr>
+                                <th>Allarme</th>
+                                <th>Zona</th>
+                                <th>Data</th>
+                                <th>Richiedente</th>
+                                <th>Gestito da</th>
+                                <th>Gestito</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="alarm in alarms">
+                                <td data-title="Allarme">{{alarm.message}}</td>
+                                <td data-title="Zona">{{alarm.sensor.caption}}</td>
+                                <td data-title="Data">{{alarm.date | date:"MM/dd/yyyy 'at' h:mma"}}</td>
+                                <td data-title="Richiedente">{{alarm.caller.first_name}} {{alarm.caller.last_name}}</td>
+                                <td data-title="Gestito da">{{alarm.handler.first_name}} {{alarm.handler.last_name}}</td>
+                                <td data-tile="Evaso">
+                                    <md-checkbox class="alarmcheck md-primary" ng-disabled="alarm.handled==true" type="checkbox" flex ng-model="alarm.handled"
+                                        ng-change="onoffAlarm(alarm)">
+                                    </md-checkbox>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </md-content>
+        </div>
+    </div>
+</div>
+<!--VISUALIZZAZIONE PDF ALLARMI-->
+<div id="modal_search_alarms" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+                <h4 class="modal-title">Scegli un intervallo temporale</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="margin-left: 34%;">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="row">
+                                    <label for="dateI"></label>
+                                    <md-datepicker id="dateI" class="dateI" ng-model="date['start']" ng-required="item.required" ng-keydown="disableKey($event)"></md-datepicker>
+                                    <label for="dateF"></label>
+                                    <md-datepicker id="dateF" class="dateF" md-min-date="model['start']" ng-model="date['end']" ng-required="item.required" ng-keydown="disableKey($event)"></md-datepicker>
+                                </div>
+                            </div>
+                            <button class="row btnallarme" ng-click="downloadPDF()" style="margin-left: 0px; margin-right: 44%; margin-top: 7%;">Scarica Pdf</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

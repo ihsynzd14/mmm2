@@ -1,0 +1,16 @@
+<md-dialog class="mymedtagdialog" aria-label="Salvavita" id="inputDialog">
+	<md-dialog-content>
+		<md-button class="md-icon-button" ng-click="cancel()">
+			<md-icon class="fa fa-times " aria-label="Close dialog "></md-icon>
+		</md-button>
+		<div class="overlay">
+			<img class="img-profile-box" ng-if="mymedtag.user.avatar" src="{{mymedtag.user.avatar}}" style="margin-bottom: 6%;">
+			<img class="img-profile-box" ng-if="!mymedtag.user.avatar" src="{{IMG_DEFAULT}}" style="margin-bottom: 6%;">
+			<div style="padding-top: 10%; padding-left: 30%;">{{mymedtag.user.first_name}} {{mymedtag.user.last_name}}</div>
+			<div class="overlay_outer ">
+				<div class="overlay_inner" ng-init="init()">
+					<div ng-include src="'templates/templatemymedtag.html'"></div>
+			</div>
+		</div>
+	</md-dialog-content>
+</md-dialog>

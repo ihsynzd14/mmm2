@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "grunt": "^1.0.1",
+    "grunt-bower-concat": "^1.0.0"
+  }
+}

@@ -1,0 +1,280 @@
+<style>
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    padding: 12px 16px;
+    z-index: 1;
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+</style>
+
+<!--Menù-->
+<div class="app app-header-fixed">
+  <div class="container" ng-show="path!='/allarmi' && path!='/ospiti' && path!='/dipendenti' && path!='/gestioneAffiliatiCOC' && path!='/gestioneMembriCOC' && path!='/gestioneRichiesteCOC'">
+    <ul class="menu">
+      <li ng-show="profile.is_staff">
+        <a href="#/admin" class="mmb_menu" ui-sref=".admin">Admin</a>
+      </li>
+      <li ng-show="!profile.is_staff && (profile.structuremembership_set.length==0 || checkRolesStructures(profile.groups[0].name, 'bacheca'))">
+        <a href="#/bacheca" ng-click="initPost()" class="mmb_menu mmb_bacheca" ui-sref=".bacheca">Bacheca
+          <sup ng-if="notifications['post']['count']>0" style="margin-top: 0px; border: 2px solid red; border-radius: 50%; padding-left: 5px; padding-right: 5px; color: red;">{{notifications['post']['count']}}</sup>
+        </a>
+      </li>
+      <li class="menu_init" ng-show="!profile.is_staff && (profile.structuremembership_set.length==0 || checkRolesStructures(profile.groups[0].name, 'dossier'))">
+        <a href="#/dossier" ng-click="initDossier()" class="mmb_menu mmb_dossier" ui-sref=".dossier">
+        Dossier Medico
+        <sup ng-if="notifications['dossier']['count']>0" style="margin-top: 0px; border: 2px solid red; border-radius: 50%; padding-left: 5px; padding-right: 5px; color: red;">{{notifications['dossier']['count']}}</sup>
+      </a>
+      </li>
+      <li class="menu_init" ng-show="!profile.is_staff && (profile.structuremembership_set.length==0 || checkRolesStructures(profile.groups[0].name, 'agenda'))">
+        <a href="#/agenda" ng-click="assignEvent()" class="mmb_menu mmb_agenda" ui-sref=".agenda">Agenda e Promemoria
+        <sup ng-if="notifications['event']['count']>0" style="margin-top: 0px; border: 2px solid red; border-radius: 50%; padding-left: 5px; padding-right: 5px; color: red;">{{notifications['event']['count']}}</sup>
+        </a></li>
+      <li class="menu_init" ng-show="!profile.is_staff && (profile.structuremembership_set.length==0 || checkRolesStructures(profile.groups[0].name, 'gruppi'))">
+        <a href="#/gruppi" ng-click="initGruppi()" class="mmb_menu mmb_gruppi" ui-sref=".gruppi">Gruppi
+            <sup ng-if="notifications['circle']['count']>0" style="margin-top: 0px; border: 2px solid red; border-radius: 50%; padding-left: 5px; padding-right: 5px; color: red;">{{notifications['circle']['count']}}</sup>
+        </a>
+      </li>
+      <li class="menu_init" ng-show="!profile.is_staff && (profile.structuremembership_set.length==0 || checkRolesStructures(profile.groups[0].name, 'terapia'))"><a href="#/terapia" class="mmb_menu mmb_terapia" ui-sref=".terapia">Terapia</a></li>
+      <li class="menu_init" ng-show="!profile.is_staff && profile.structuremembership_set.length>0"><a class="mmb_menu mmb_strutture" href="#/ingressi">Strutture</a></li>
+    </ul>
+  </div>
+  <div class="container" ng-show="path=='/ospiti' || path=='/dipendenti'">
+    <ul class="menu strutture">
+      <li class="menu_strutture" ng-show="checkRolesStructures(profile.groups[0].name, 'ospiti')"><a class="mmb_menu mmb_ospiti mmb_selected" href="#/ospiti">Gestione Ospiti</a></li>
+      <li class="menu_strutture" ng-show="checkRolesStructures(profile.groups[0].name, 'dipendenti')"><a class="mmb_menu mmb_dipendenti" href="#/dipendenti">Gestione Dipendenti</a></li>
+      <li class="menu_strutture" ng-show="checkRolesStructures(profile.groups[0].name, 'allarmi')" ng-click="openAlarm()"><a no-href>Gestione Allarmi</a></li>
+    </ul>
+  </div>
+  <div class="container" ng-show="path=='/gestioneAffiliatiCOC' || path=='/gestioneMembriCOC' || path=='/gestioneRichiesteCOC'">
+    <ul class="menu strutture">
+      <li class="menu_strutture" ng-show="checkRolesStructures(profile.groups[0].name, 'affiliatiCOC')"><a class="mmb_menu mmb_ospiti mmb_selected" href="#/gestioneAffiliatiCOC">Gestione Affiliati</a></li>
+      <!--<li class="menu_strutture" ng-show="checkRolesStructures(profile.groups[0].name, 'gestioneMembriCOC')"><a class="mmb_menu mmb_dipendenti" href="#/gestioneMembriCOC">Gestione Dipendenti</a></li>-->
+      <li class="menu_strutture" ng-show="checkRolesStructures(profile.groups[0].name, 'assistenzeCOC')" ng-click="openAssistenzaCOC()"><a no-href>Gestione richieste assistenza</a></li>
+    </ul>
+  </div>
+
+  <!--Sidebar-->
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-4 menu-laterale" ng-show="path!='/allarmi' && path!='/ospiti' && path!='/dipendenti' && path!='/gestioneAffiliatiCOC' && path!='/gestioneMembriCOC'  && path!='/gestioneRichiesteCOC'">
+        <div id="sidebar">
+          <div class="boxwho" ng-init="reloadProfilo()">
+            <img ng-src="{{profile.avatar || IMG_DEFAULT}}" class="img-profile-box">
+            <div class="infoboxwho">
+              <div class="info">
+                <a href="#/profilo" ui-sref=".profilo" alt="Visita il tuo profilo!" title="Visita il tuo profilo!">
+                    {{profile.first_name || "-" }} {{profile.last_name}}
+                </a>
+              </div>
+              <div class="info1">
+                {{profile.town || "-" }}
+              </div>
+              <a no-href ng-click="uploadAvatar()"><i class="fa fa-camera" aria-hidden="true" title="Cambia immagine del profilo"></i></a>
+            </div>
+          </div>
+          <div class="boxinfo">
+            <div class="boxinfoheader">
+              informazioni generali
+            </div>
+            <i class="fa fa-check sidebar-fa" aria-hidden="true"></i>
+            <a href="#/profilo" ui-sref=".profilo" class="mmb_menu mmb_profilo" alt="Visita il tuo profilo!" title="Visita il tuo profilo!">
+                Visita il tuo profilo
+            </a>
+            <md-button aria-label="{{tooltipMenuDetail}}" style="cursor:default">
+              <md-icon class="fa fa-question-circle"></md-icon>
+              <md-tooltip md-direction="right">
+                <span>
+                    {{tooltipMenuDetail}}
+                </span>
+              </md-tooltip>
+            </md-button>
+            <br>
+            <!-- <i class="fa fa-check sidebar-fa" aria-hidden="true"></i>
+            <div class="dropdown mmb_menu ">
+              <span style="padding-left: 9px;">
+                <a style="margin-left: 0px;">
+                    Guida e supporto
+                </a>
+              </span>
+              <div class="dropdown-content" style="min-width: 47vh !important; padding-left: 0px;">
+                <p>
+                  <ul style="list-style-type:none">
+                    <li style="padding-top: 5px; padding-bottom: 5px;">
+                      <i class="fa fa-envelope-o" aria-hidden="true" style="padding-right: 5px;"></i> Mail: <a href="mailto:support@mymedbook.it">support@mymedbook.it</a>
+                    </li>
+                    <li style="padding-top: 5px; padding-bottom: 5px;">
+                      <i class="fa fa-whatsapp" aria-hidden="true" style="padding-right: 5px;"></i> Whatsapp: +39 391 760
+                      8754
+                    </li>
+                    <li style="padding-top: 5px; padding-bottom: 5px;">
+                      <i class="fa fa-book" aria-hidden="true" alt="Scarica la lista degli smartphone compatibili" title="Scarica la lista degli smartphone compatibili"></i>
+                      <a no-href ng-click="openPdfManual()">
+                        Manuale utente
+                        </a>
+                    </li>
+                    <li>
+                      <i class="fa fa-book" aria-hidden="true" alt="Scarica la lista degli smartphone compatibili" title="Scarica la lista degli smartphone compatibili"></i>
+                      <a no-href ng-click="openPdfSmartphoneCompatibility()">
+                        Elenco smartphone con lettori NFC
+                      </a>
+                    </li>
+                  </ul>
+                </p>
+              </div>
+            </div>
+            <br> -->
+            <i class="fa fa-user-secret sidebar-fa" style="padding-top: 18px;" aria-hidden="true"></i>
+            <!--<a no-href ui-sref=".privacy">Impostazioni Privacy</a>-->
+            <a no-href ui-sref=".privacy" class="mmb_menu mmb_privacy">Impostazioni Privacy</a>
+            <md-button aria-label="{{tooltipMenuPrivacy}}" style="cursor:default">
+              <md-icon class="fa fa-question-circle"></md-icon>
+              <md-tooltip md-direction="right">
+                <span>
+                    {{tooltipMenuPrivacy}}
+                </span>
+              </md-tooltip>
+            </md-button>
+            <br>
+            <!--ng-show="profile.structuremembership_set.length==0"-->
+            <span>
+              <i class="fa fa-check sidebar-fa" aria-hidden="true" ></i>
+              <a href="#/mymedtag" ui-sref=".mymedtag" class="mmb_menu mmb_mymedtag" alt="Visualizza i tuoi mymedtag" title="Visualizza i tuoi mymedtag">
+                  MyMedTag
+              </a>
+              <md-button aria-label="{{tooltipMyMedTag}}" style="cursor:default">
+              <md-icon class="fa fa-question-circle"></md-icon>
+              <md-tooltip md-direction="right">
+                <span>
+                    {{tooltipMyMedTag}}
+                </span>
+            </md-tooltip>
+            </md-button>
+            </span>
+            <br>
+            <i class="fa fa-check sidebar-fa" aria-hidden="true"></i>
+            <a href="#/change_password" ui-sref=".change_password" class="mmb_menu mmb_change_password" alt="Cambia la password!" title="Cambia la password!">
+                Cambia la tua password
+            </a>
+            <md-button aria-label="{{tooltipChangePassword}}" style="cursor:default">
+              <md-icon class="fa fa-question-circle"></md-icon>
+              <md-tooltip md-direction="right">
+                <span>
+                    {{tooltipChangePassword}}
+                </span>
+              </md-tooltip>
+            </md-button>
+            <br>
+          </div>
+          <div class="boxinfo boxgruppi getProfilo" ng-show="profile.structuremembership_set.length==0 || checkRolesStructures(profile.groups[0].name, 'gruppi')"
+            ng-controller="gruppiController">
+            <div class="boxinfoheader">
+              I miei gruppi
+            </div>
+            <div>
+              <span class="text1" ng-if="!gruppi || gruppi.length<=0">
+                  <i class="fa fa-users" aria-hidden="true" hspace="20"></i> Non sono presenti gruppi
+              </span>
+              <ul id="textgroup" class="textgroup">
+                <li id="gruppo_{{gruppo.id}}" ng-repeat="gruppo in gruppi track by $index" ng-if="gruppo.created_by.pk==profile.pk" ng-click="detail($sv, gruppo)">
+                  <i class="fa fa-users" aria-hidden="true" hspace="20"></i>{{gruppo.name}}
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="boxinfo" id="boxcalendar" ng-controller="agendaController" ng-show="profile.structuremembership_set.length==0 || checkRolesStructures(profile.groups[0].name, 'agenda')">
+            <div class="boxinfoheader">
+              agenda e promemoria
+            </div>
+            <!--calendario-->
+            <div ng-init="assignEvent()">
+              <div ui-calendar="uiConfig1.calendar" class="span8 calendar calendar-menu" hideToolbar ng-model="eventSources"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--CONTAINER A DESTRA-->
+      <div id="content" class="app-content col-xs-8" role="main" ng-class="(path=='/allarmi' || path=='/ospiti' || path=='/dipendenti' || path=='/gestioneAffiliatiCOC' || path=='/gestioneMembriCOC' || path=='/gestioneRichiesteCOC') ? 'col-lg-12' : 'col-xs-8'">
+        <div class="app-content-body ">
+          <div class="hbox hbox-auto-xs hbox-auto-sm">
+            <!-- main -->
+            <div class="col">
+              <div class="view-content" ui-view="view-content" autoscroll>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--MODALE UPLOAD-->
+  <div id="modal_upload" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+              <i class="fa fa-times" aria-hidden="true"></i>
+          </button>
+          <h4 class="modal-title">{{title_description}}</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <div class="form-group">
+                  <!--label class="col-sm-4 control-label" for="descrizione">Descrizione</label-->
+                  <div class="col-sm-12">
+                    <input ngf-select="" ng-model="picFile" name="file" ngf-accept="'image/*'" required="" type="file">
+                    <br />
+                    <img ngf-src="picFile" class="thumb">
+                    <button class="btnload" ng-click="uploadPic(picFile)">Carica</button>
+                  </div>
+                </div>
+                <!--<div align="center" style="margin-top: 50px;">
+                    <button class="btn btn-sm btn-primary" ng-click="closeModalUpload()">Salva</button>
+                </div>-->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="modal_privacy" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" ng-click="closeDialogPrivacy()" data-dismiss="modal">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+          <h4 class="modal-title">Condizioni sulla la privacy</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <div class="form-group">
+                  <!--label class="col-sm-4 control-label" for="descrizione">Descrizione</label-->
+                  <div class="col-sm-12" style="overflow:auto;height:25em;">
+                    <ng-include src="'templates/privacy_text.html'"></ng-include>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

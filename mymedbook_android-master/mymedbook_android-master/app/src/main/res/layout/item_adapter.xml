@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    android:paddingBottom="1dp"
+    android:paddingLeft="2dp"
+    android:paddingRight="2dp"
+    android:paddingTop="1dp">
+
+    <LinearLayout
+        android:id="@+id/lin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/table_second"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:id="@+id/text_key"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            tools:text="Prova\ndsdadadadadasdasdasd\nsdasda"/>
+
+        <FrameLayout
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"/>
+
+        <TextView
+            android:id="@+id/text_value"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            tools:text="DASDASDsadasddsdddddddddddd\ndasdadadads\ndadadads\ndasdadada\ndsaadadasdadas"/>
+
+    </LinearLayout>
+
+</FrameLayout>

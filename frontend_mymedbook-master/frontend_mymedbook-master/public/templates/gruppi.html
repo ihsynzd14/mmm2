@@ -1,0 +1,37 @@
+<style>
+	.group_visibility {
+		visibility: hidden
+	}
+</style>
+
+<div class="user-box" ng-init="init()">
+	<div class="header-box"> Gruppi
+		<md-button aria-label="" style="cursor:default">
+			<md-icon class="fa fa-question-circle"></md-icon>
+			<md-tooltip md-direction="bottom">
+				<span>Qui puoi creare gruppi tematici, dove invitare altri utenti di MyMedBook.</span>
+			</md-tooltip>
+		</md-button>
+	</div>
+	<div class="body-box">
+		<p ng-if="gruppo.length<=0" style="display:none">Non sono presenti gruppi</p>
+		<div id="gruppo_{{gruppo.pk}}" ng-repeat="gruppo in gruppi">
+			<md-content ng-class="{'group_visibility': gruppo.created_by.pk!=profile.pk}">
+				<md-button aria-label="true" class="btnsmall" title="Cancella il gruppo" ng-click="conferma($ev, gruppo.pk)">
+					<i class="fa fa-trash-o" aria-hidden="true" hspace="20"></i>
+				</md-button>
+			</md-content>
+			<md-content ng-class="{'group_visibility': gruppo.created_by.pk!=profile.pk}">
+				<button class="btnsmall" title="Modifica il gruppo" ng-click="edit($event, gruppo)">
+				<i class="fa fa-pencil" aria-hidden="true"></i>
+			</button>
+			</md-content>
+			<div class="textgroup1" style="margin-left: 20%;" ng-click="detail($ev,gruppo)">
+				{{gruppo.name}} ({{gruppo.created_by.first_name }} {{gruppo.created_by.last_name}})
+			</div>
+		</div>
+	</div>
+	<div class="footer-box">
+		<button class="btn" title="crea un nuovo gruppo" ng-click="newGroup($event)">Crea nuovo gruppo</button>
+	</div>
+</div>

@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "130377016895",
+    "firebase_url": "https://mymedtagnotification.firebaseio.com",
+    "project_id": "mymedtagnotification",
+    "storage_bucket": "mymedtagnotification.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:130377016895:android:a966ab6b91b17a1f",
+        "android_client_info": {
+          "package_name": "it.netfarm.mymedbook.cdv"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "130377016895-dh25ha4stk828r73u8i4cuv01943302r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqNGEkFIzsIU0i1RIHkbOgD8NazFdQ1z4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:130377016895:android:8cd9b6976e29aaac",
+        "android_client_info": {
+          "package_name": "it.netfarm.mymedbook.mymedtag"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "130377016895-dh25ha4stk828r73u8i4cuv01943302r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqNGEkFIzsIU0i1RIHkbOgD8NazFdQ1z4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
